@@ -1,6 +1,31 @@
 <%- include("./templates/encabezado") %>
 <%- include("./templates/menu") %>
 
+<div class="container mt-5">
+    <form action="/insertarRegistro" method="post">
+        <div class="card">
+            <div class="card-header">
+                <h1>Nueva Venta</h1>
+            </div>
+            <div class="card-body">
+                <input class="form-control mb-3" type="text" name="noNota" id="noNota" placeholder="Número de Nota" autofocus required value="<%= formData.noNota || '' %>">
+                <input class="form-control mb-3" type="text" name="nombreCliente" id="nombreCliente" placeholder="Nombre del Cliente" required value="<%= formData.nombreCliente || '' %>">
+                <div class="d-flex">
+                    <input class="form-control mb-3" type="text" name="diaCompra" id="diaCompra" placeholder="Día" required value="<%= formData.diaCompra || '' %>">
+                    <select class="form-control mb-3" name="mesCompra" id="mesCompra" required></select>
+                    <select class="form-control mb-3" name="anioCompra" id="anioCompra" required></select>
+                </div>
+                <input class="form-control mb-3" type="text" name="ganancia" id="ganancia" placeholder="Ganancia" value="<%= formData.ganancia || '' %>">
 
+            </div>
+            <div class="card-footer d-flex">
+                <button class="form-control btn btn-primary" type="button" style="flex: 1; margin-right: 5px;">Vaciar</button>
+                <button class="form-control btn btn-primary" type="submit" style="flex: 2;">Guardar Registro</button>
+            </div>
+                   
+        </div>
+    </form>
+</div>
+<script src="/web/js/formularioRegistro.js" ></script>
 
 <%- include("./templates/pie") %>

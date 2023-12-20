@@ -2,16 +2,16 @@
 <%- include("../templates/menu") %>
 
 <div class="container mt-5">
-    <form action="/insertarProducto" method="post" enctype="multipart/form-data">
+    <form action="/insertarProducto" method="post">
         <div class="card">
             <div class="card-header">
                 <h1>Nuevo Producto</h1>
             </div>
             <div class="card-body">
-                <input class="form-control mb-3" type="text" name="nombre" id="nombre" placeholder="Nombre" autofocus>
-                <input class="form-control mb-3" type="text" name="precio" id="precio" placeholder="Precio">
-                <input class="form-control mb-3" type="text" name="costo" id="costo" placeholder="Costo">
-                <input class="form-control mb-3" type="text" name="ganancia" id="ganancia" placeholder="Ganancia">
+                <input class="form-control mb-3" type="text" name="nombre" id="nombre" placeholder="Nombre" autofocus required>
+                <input class="form-control mb-3" type="text" name="precio" id="precio" placeholder="Precio" required>
+                <input class="form-control mb-3" type="text" name="costo" id="costo" placeholder="Costo" required>
+                <input class="form-control mb-3" type="text" name="ganancia" id="ganancia" placeholder="Ganancia" required>
             </div>
             <div class="card-footer">
                 <button class="form-control btn btn-primary" type="submit">Guardar producto</button>
