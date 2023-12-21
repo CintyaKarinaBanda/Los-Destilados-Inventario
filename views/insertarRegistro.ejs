@@ -8,16 +8,16 @@
                 <h1>Nueva Venta</h1>
             </div>
             <div class="card-body">
-                <input class="form-control mb-3" type="text" name="noNota" id="noNota" placeholder="Número de Nota" autofocus required value="<%= formData.noNota || '' %>">
-                <input class="form-control mb-3" type="text" name="nombreCliente" id="nombreCliente" placeholder="Nombre del Cliente" required value="<%= formData.nombreCliente || '' %>">
+                <input class="form-control mb-3" type="text" name="noNota" id="noNota" placeholder="Número de Nota" value="<%= formData.noNota || '' %>" required autofocus>
+                <input class="form-control mb-3" type="text" name="nombreCliente" id="nombreCliente" placeholder="Nombre del Cliente"  value="<%= formData.nombreCliente || '' %>" required>
                 <div class="d-flex">
-                    <input class="form-control mb-3" type="text" name="diaCompra" id="diaCompra" placeholder="Día" required value="<%= formData.diaCompra || '' %>">
-                    <select class="form-control mb-3" name="mesCompra" id="mesCompra" required></select>
-                    <select class="form-control mb-3" name="anioCompra" id="anioCompra" required></select>
+                    <input class="form-control mb-3" type="text" name="diaCompra" id="diaCompra" placeholder="Día" value="<%= formData.diaCompra || '' %>" required>
+                    <select class="form-control mb-3" name="mesCompra" id="mesCompra"></select>
+                    <select class="form-control mb-3" name="anioCompra" id="anioCompra"></select>
                 </div>
-                <input class="form-control mb-3" type="text" name="proveedor" id="proveedor" placeholder="Proveedor" value="<%= formData.costo || '' %>">
+                <input class="form-control mb-3" type="text" name="proveedor" id="proveedor" placeholder="Proveedor" value="<%= formData.costo || '' %>" required>
                 
-                <input class="form-control mb-3" type="text" list="productos" name="producto" id="producto" placeholder="Producto" value="<%= formData.ganancia || '' %>">
+                <input class="form-control mb-3" type="text" list="productos" name="producto" id="producto" placeholder="Producto" value="<%= formData.ganancia || '' %>" required>
                 <datalist id="productos">
                     <% 
                         productos.forEach((producto) => {
@@ -28,13 +28,13 @@
                     %>  
                 </datalist>
                 <div class="d-flex">
-                    <input class="form-control mb-3" type="text" name="precio" id="precio" placeholder="Precio" value="<%= formData.precio || '' %>">
+                    <input class="form-control mb-3" type="text" name="precio" id="precio" placeholder="Precio" value="<%= formData.precio || '' %>" required>
                     <input class="form-control mb-3" type="text" name="costo" id="costo" placeholder="Costo" value="<%= formData.costo || '' %>">
-                    <input class="form-control mb-3" type="text" name="ganancia" id="ganancia" placeholder="Ganancia" value="<%= formData.ganancia || '' %>">
+                    <input class="form-control mb-3" type="text" name="ganancia" id="ganancia" placeholder="Ganancia" value="<%= formData.ganancia || '' %>" required>
                 </div>
                 <div class="d-flex">
-                    <input class="form-control mb-3" type="text" name="anioQR" id="anioQR" placeholder="Año del código QR" value="<%= formData.precio || '' %>">
-                    <input class="form-control mb-3" type="text" name="codigoQR" id="codigoQR" placeholder="Código QR" value="<%= formData.codigoQR || '' %>">
+                    <input class="form-control mb-3" type="text" name="anioQR" id="anioQR" placeholder="Año del código QR" value="<%= formData.precio || '' %>" required>
+                    <input class="form-control mb-3" type="text" name="codigoQR" id="codigoQR" placeholder="Código QR" value="<%= formData.codigoQR || '' %>" required>
                 </div>
             </div>
             <div class="card-footer d-flex">
@@ -46,6 +46,6 @@
     </form>
 </div>
 <br><br>
-<script src="/web/js/formularioRegistro.js" ></script>
+<script type="module" src="/web/js/formularioRegistro.js" ></script>
 
 <%- include("./templates/pie") %>

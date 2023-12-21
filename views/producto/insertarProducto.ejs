@@ -9,9 +9,17 @@
             </div>
             <div class="card-body">
                 <input class="form-control mb-3" type="text" name="nombre" id="nombre" placeholder="Nombre" autofocus required>
-                <input class="form-control mb-3" type="text" name="precio" id="precio" placeholder="Precio" required>
-                <input class="form-control mb-3" type="text" name="costo" id="costo" placeholder="Costo" required>
-                <input class="form-control mb-3" type="text" name="ganancia" id="ganancia" placeholder="Ganancia" required>
+                <div class="d-flex">
+                    <input class="form-control mb-3" type="text" name="precio" id="precio" placeholder="Precio" required>
+                    <input class="form-control mb-3" type="text" name="costo" id="costo" placeholder="Costo" required>
+                    <input class="form-control mb-3" type="text" name="ganancia" id="ganancia" placeholder="Ganancia" required>
+                </div>
+                <label class="d-block text-center font-weight-bold mb-3" style="font-size: 1.5rem;">Utilidades</label>
+                <div class="d-flex">
+                    <input class="form-control mb-3" type="text" name="sujetoA" id="sujetoA" placeholder="Andres" required>
+                    <input class="form-control mb-3" type="text" name="sujetoB" id="sujetoB" placeholder="Erika" required>
+                    <input class="form-control mb-3" type="text" name="sujetoC" id="sujetoC" placeholder="Negocio" required>
+                </div>
             </div>
             <div class="card-footer">
                 <button class="form-control btn btn-primary" type="submit">Guardar producto</button>

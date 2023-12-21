@@ -10,9 +10,17 @@
             <div class="card-body">
                 <input type="text" name="id" id="id" value="<%= product.id %>" hidden>
                 <input class="form-control mb-3" type="text" name="nombre" id="nombre" placeholder="Nombre" value="<%= product.nombre %>" autofocus required>
-                <input class="form-control mb-3" type="text" name="precio" id="precio" placeholder="Precio" value="<%= product.precio %>" required>
-                <input class="form-control mb-3" type="text" name="costo" id="costo" placeholder="Costo" value="<%= product.costo %>" required>
-                <input class="form-control mb-3" type="text" name="ganancia" id="ganancia" placeholder="Ganancia" value="<%= product.ganancia %>" required>
+                <div class="d-flex">
+                    <input class="form-control mb-3" type="text" name="precio" id="precio" placeholder="Precio" value="<%= product.precio %>" required>
+                    <input class="form-control mb-3" type="text" name="costo" id="costo" placeholder="Costo" value="<%= product.costo %>" required>
+                    <input class="form-control mb-3" type="text" name="ganancia" id="ganancia" placeholder="Ganancia" value="<%= product.ganancia %>" required>
+                </div>
+                <label class="d-block text-center font-weight-bold mb-3" style="font-size: 1.5rem;">Utilidades</label>
+                <div class="d-flex">
+                    <input class="form-control mb-3" type="text" name="sujetoA" id="sujetoA" placeholder="Andres" value="<%= product.sujetoA %>" required>
+                    <input class="form-control mb-3" type="text" name="sujetoB" id="sujetoB" placeholder="Erika" value="<%= product.sujetoB %>" required>
+                    <input class="form-control mb-3" type="text" name="sujetoC" id="sujetoC" placeholder="Negocio" value="<%= product.sujetoC %>" required>
+                </div>
             </div>
             <div class="card-footer">
                 <button class="form-control btn btn-primary" type="submit">Guardar producto</button>

@@ -6,6 +6,9 @@ class Producto{
         this.precio=data.precio;
         this.costo=data.costo;
         this.ganancia=data.ganancia;
+        this.sujetoA=data.sujetoA;
+        this.sujetoB=data.sujetoB;
+        this.sujetoC=data.sujetoC;
     }
 
     set id(id){
@@ -24,6 +27,15 @@ class Producto{
     set ganancia(ganancia){
         ganancia.length>0?this._ganancia=ganancia: this.bandera=1;
     }
+    set sujetoA(sujetoA){
+        sujetoA.length>0?this._sujetoA=sujetoA: this.bandera=1;
+    }
+    set sujetoB(sujetoB){
+        sujetoB.length>0?this._sujetoB=sujetoB: this.bandera=1;
+    }
+    set sujetoC(sujetoC){
+        sujetoC.length>0?this._sujetoC=sujetoC: this.bandera=1;
+    }
 
     get id(){
         return this._id;
@@ -40,6 +52,15 @@ class Producto{
     get ganancia(){
         return this._ganancia;
     }
+    get sujetoA(){
+        return this._sujetoA;
+    }
+    get sujetoB(){
+        return this._sujetoB;
+    }
+    get sujetoC(){
+        return this._sujetoC;
+    }
     get obtenerDatos(){
         if(this._id!=null)
             return{
@@ -47,14 +68,20 @@ class Producto{
                 nombre: this.nombre,
                 precio: this.precio,
                 costo: this.costo,
-                ganancia: this.ganancia
+                ganancia: this.ganancia,
+                sujetoA: this.sujetoA,
+                sujetoB: this.sujetoB,
+                sujetoC: this.sujetoC
             }
         else{
             return{
                 nombre: this.nombre,
                 precio: this.precio,
                 costo: this.costo,
-                ganancia: this.ganancia
+                ganancia: this.ganancia,
+                sujetoA: this.sujetoA,
+                sujetoB: this.sujetoB,
+                sujetoC: this.sujetoC
             }
         }
     }

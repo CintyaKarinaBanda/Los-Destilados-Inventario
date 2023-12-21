@@ -1,3 +1,5 @@
+import { buscarPorNombre, mostrarProducto } from '../../bd/productobd.js';
+
 document.addEventListener("DOMContentLoaded", function () {
   var selectMes = document.getElementById("mesCompra");
   var selectAnio = document.getElementById("anioCompra");
@@ -32,5 +34,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
   selectAnio.value = anioActual;
   selectMes.value = new Date().getMonth() + 1;
-  
+
+  document.getElementById('producto').addEventListener('input', async function () {
+    var valorInput = this.value;
+    var productos = await mostrarProducto();
+
+    for (const productoNombre of productos) {
+        if (valorInput === productoNombre) {
+            var product = await buscarPorNombre(productoNombre);
+            var precio = document.getElementById("precio");
+            var costo = document.getElementById("costo");
+            var ganancia = document.getElementById("ganancia");
+            precio.value = product.precio || '';
+            costo.value = product.costo || '';
+            ganancia.value = product.ganancia || '';
+            break;
+        }
+    }
+  });
 });
