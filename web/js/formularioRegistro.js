@@ -1,10 +1,19 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
   var selectMes = document.getElementById("mesCompra");
   var selectAnio = document.getElementById("anioCompra");
   var meses = [
-    "Enero", "Febrero", "Marzo", "Abril",
-    "Mayo", "Junio", "Julio", "Agosto",
-    "Septiembre", "Octubre", "Noviembre", "Diciembre"
+    "Enero",
+    "Febrero",
+    "Marzo",
+    "Abril",
+    "Mayo",
+    "Junio",
+    "Julio",
+    "Agosto",
+    "Septiembre",
+    "Octubre",
+    "Noviembre",
+    "Diciembre",
   ];
   for (var i = 0; i < meses.length; i++) {
     var option = document.createElement("option");
@@ -23,4 +32,5 @@ document.addEventListener("DOMContentLoaded", function() {
 
   selectAnio.value = anioActual;
   selectMes.value = new Date().getMonth() + 1;
+  
 });

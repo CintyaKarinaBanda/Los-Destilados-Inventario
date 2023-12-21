@@ -15,8 +15,27 @@
                     <select class="form-control mb-3" name="mesCompra" id="mesCompra" required></select>
                     <select class="form-control mb-3" name="anioCompra" id="anioCompra" required></select>
                 </div>
-                <input class="form-control mb-3" type="text" name="ganancia" id="ganancia" placeholder="Ganancia" value="<%= formData.ganancia || '' %>">
-
+                <input class="form-control mb-3" type="text" name="proveedor" id="proveedor" placeholder="Proveedor" value="<%= formData.costo || '' %>">
+                
+                <input class="form-control mb-3" type="text" list="productos" name="producto" id="producto" placeholder="Producto" value="<%= formData.ganancia || '' %>">
+                <datalist id="productos">
+                    <% 
+                        productos.forEach((producto) => {
+                    %>
+                    <option value="<%= producto.nombre %>">
+                    <% 
+                        }); 
+                    %>  
+                </datalist>
+                <div class="d-flex">
+                    <input class="form-control mb-3" type="text" name="precio" id="precio" placeholder="Precio" value="<%= formData.precio || '' %>">
+                    <input class="form-control mb-3" type="text" name="costo" id="costo" placeholder="Costo" value="<%= formData.costo || '' %>">
+                    <input class="form-control mb-3" type="text" name="ganancia" id="ganancia" placeholder="Ganancia" value="<%= formData.ganancia || '' %>">
+                </div>
+                <div class="d-flex">
+                    <input class="form-control mb-3" type="text" name="anioQR" id="anioQR" placeholder="Año del código QR" value="<%= formData.precio || '' %>">
+                    <input class="form-control mb-3" type="text" name="codigoQR" id="codigoQR" placeholder="Código QR" value="<%= formData.codigoQR || '' %>">
+                </div>
             </div>
             <div class="card-footer d-flex">
                 <button class="form-control btn btn-primary" type="button" style="flex: 1; margin-right: 5px;">Vaciar</button>
@@ -26,6 +45,7 @@
         </div>
     </form>
 </div>
+<br><br>
 <script src="/web/js/formularioRegistro.js" ></script>
 
 <%- include("./templates/pie") %>

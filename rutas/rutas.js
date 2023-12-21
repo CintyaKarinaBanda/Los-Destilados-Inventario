@@ -12,15 +12,17 @@ rutas.get("/inventario", (req,res)=>{
 });
 
 //---------------------------Ruta Insertar Registro--------------------------
-rutas.get("/insertarRegistro", (req,res)=>{
+rutas.get("/insertarRegistro", async(req,res)=>{
+    var productos = await mostrarProducto();
     const formData = req.body || {};
-    res.render("insertarRegistro", { formData });
+    res.render("insertarRegistro", { formData , productos});
 });
 
 rutas.post("/insertarRegistro", async(req,res)=>{
+    var productos = await mostrarProducto();
     //var error=await nuevoRegistro(req.body);
     const formData = req.body || {};
-    res.render("insertarRegistro", { formData });
+    res.render("insertarRegistro", { formData , productos});
 });
 
 
