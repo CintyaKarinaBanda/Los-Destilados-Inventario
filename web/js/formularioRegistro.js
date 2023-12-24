@@ -34,16 +34,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
   document.getElementById('producto').addEventListener('input', async function () {
     var valorInput = this.value;
-    fetch(`/llenarDatos/${valorInput}`)
-      .then(response => response.json())
-      .then(data => {
-        if (data && data.datos) {
-          document.getElementById('precio').value = data.datos.precio || '';
-          document.getElementById('costo').value = data.datos.costo || '';
-          document.getElementById('ganancia').value = data.datos.ganancia || '';
-        } 
-      })
-      .catch(error => console.error('Error:', error));
+    if (valorInput !== '') {
+      fetch(`/llenarDatos/${valorInput}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data != undefined) {
+            document.getElementById('precio').value = data.datos.precio || '';
+            document.getElementById('costo').value = data.datos.costo || '';
+            document.getElementById('ganancia').value = data.datos.ganancia || '';
+          } 
+        })
+        .catch(error => console.error('Error:', error));
+    }
   });
-  
 });

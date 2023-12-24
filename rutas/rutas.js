@@ -28,17 +28,9 @@ rutas.post("/insertarRegistro", async(req,res)=>{
 rutas.get('/llenarDatos/:valor', async (req, res) => {
     var nombreProducto = req.params.valor;
     var product = await buscarPorNombre(nombreProducto);
-    if(product==undefined){
-        product={
-            nombre:"",
-            precio:"",
-            costo:"",
-            ganancia:""
-        }
-    }
     res.json({ datos: product });
 
-});
+})
 
 
 //---------------------------Ruta Productos----------------------------------
