@@ -9,6 +9,7 @@ app.set("view engine","ejs");
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use('/web', express.static(path.join(__dirname, 'web')));
+app.use('/bd', express.static(path.join(__dirname, 'bd')));
 app.use("/", rutas);
 
 var port=process.env.PORT || 3000;

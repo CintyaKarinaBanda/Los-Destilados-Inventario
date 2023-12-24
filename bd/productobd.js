@@ -1,5 +1,5 @@
-var conexion = require("./conexion").conexionProducto;
-var Producto = require("../modelo/Producto");
+var conexion =require("./conexion").conexionProducto;
+var Producto =require("../modelo/Producto");
 
 async function mostrarProducto() {
     var products = [];
@@ -47,19 +47,22 @@ async function buscarPorID (id){
     return product;
 }
 
-async function buscarPorNombre (nombre){
-    var product;
+async function buscarPorNombre(nombre) {
+    var product={};
     try {
-        var producto=await conexion.doc(nombre).get();
-        productoObjeto = new Producto(producto.nombre, producto.data());
-        if (productoObjeto.bandera==0) {
-            product=productoObjeto.obtenerDatos;
-        }
+        var productoSnap = await conexion.where('nombre', '==', nombre).get();
+        var productoDoc = productoSnap.docs[0];
+        var productoObjeto = new Producto(productoDoc.id, productoDoc.data());
+        if (productoObjeto.bandera === 0) {
+            product = productoObjeto.obtenerDatos;
+        } 
     } catch (error) {
-        console.log("Error al recuperar los productos  "+error);
+        console.log("Error al recuperar los productos " + error);
     }
+    console.log(product);
     return product;
 }
+
 
 async function modificarProducto(datos){
     var error=1;

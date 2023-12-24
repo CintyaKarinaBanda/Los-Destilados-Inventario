@@ -1,5 +1,5 @@
 var rutas=require("express").Router();
-var {mostrarProducto, nuevoProducto, modificarProducto, borrarProducto, buscarPorID}=require("../bd/productobd");
+var {mostrarProducto, nuevoProducto, modificarProducto, borrarProducto, buscarPorID, buscarPorNombre} = require("../bd/productobd.js");
 
 //---------------------------Ruta Ingreso------------------------------------
 rutas.get("/", (req,res)=>{
@@ -23,6 +23,21 @@ rutas.post("/insertarRegistro", async(req,res)=>{
     //var error=await nuevoRegistro(req.body);
     const formData = req.body || {};
     res.render("insertarRegistro", { formData , productos});
+});
+
+rutas.get('/llenarDatos/:valor', async (req, res) => {
+    var nombreProducto = req.params.valor;
+    var product = await buscarPorNombre(nombreProducto);
+    if(product==undefined){
+        product={
+            nombre:"",
+            precio:"",
+            costo:"",
+            ganancia:""
+        }
+    }
+    res.json({ datos: product });
+
 });
 
 
