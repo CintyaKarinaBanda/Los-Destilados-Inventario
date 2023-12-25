@@ -4,37 +4,36 @@
 <div class="container mt-5">
     <div class="card">
         <div class="card-header">
-            <h1>Productos</h1>
+            <h1 class="fw-bold">Productos</h1>
         </div>
         <div class="card-body">
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th>Nombre</th>
-                        <th>Precio</th>
-                        <th>Costo</th>
-                        <th>Ganancia</th>
-                        <th>Editar/Borrar</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% 
-                        productos.forEach((producto) => {
-                    %>
-                    <tr>
-                        <td><%= producto.nombre %></td>
-                        <td><%= producto.precio %></td>
-                        <td><%= producto.costo %></td>
-                        <td><%= producto.ganancia %></td>
-                        <td><a href="/modificarProducto/<%= producto.id %>">Editar</a>
-                            <a href="/borrarProducto/<%= producto.id %>">Borrar</a>
-                        </td>
-                    </tr>
-                    <% 
-                        }); 
-                    %>
-                </tbody>
-            </table>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Precio</th>
+                            <th>Costo</th>
+                            <th>Ganancia</th>
+                            <th>Editar/Borrar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% productos.forEach((producto) => { %>
+                        <tr>
+                            <td><%= producto.nombre %></td>
+                            <td><%= producto.precio %></td>
+                            <td><%= producto.costo %></td>
+                            <td><%= producto.ganancia %></td>
+                            <td>
+                                <a href="/modificarProducto/<%= producto.id %>">Editar</a>
+                                <a href="/borrarProducto/<%= producto.id %>">Borrar</a>
+                            </td>
+                        </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
         </div>
         <div class="card-footer">
 

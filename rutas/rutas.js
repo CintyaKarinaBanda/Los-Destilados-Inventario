@@ -1,5 +1,6 @@
 var rutas=require("express").Router();
-var {mostrarProducto, nuevoProducto, modificarProducto, borrarProducto, buscarPorID, buscarPorNombre} = require("../bd/productobd.js");
+var {mostrarProducto, nuevoProducto, modificarProducto, borrarProducto, buscarPorIDProducto, buscarPorNombre} = require("../bd/productobd.js");
+var {nuevoRegistro, mostrarRegistro, borrarRegistro, modificarRegistro, buscarPorIDRegistro} = require("../bd/registro.js");
 
 //---------------------------Ruta Ingreso------------------------------------
 rutas.get("/", (req,res)=>{
@@ -7,8 +8,9 @@ rutas.get("/", (req,res)=>{
 });
 
 //---------------------------Ruta Iventario----------------------------------
-rutas.get("/inventario", (req,res)=>{
-    res.render("inventario");
+rutas.get("/inventario", async(req,res)=>{
+    var inventario = await mostrarRegistro();
+    res.render("inventario",{inventario});
 });
 
 //---------------------------Ruta Insertar Registro--------------------------
@@ -20,8 +22,8 @@ rutas.get("/insertarRegistro", async(req,res)=>{
 
 rutas.post("/insertarRegistro", async(req,res)=>{
     var productos = await mostrarProducto();
-    //var error=await nuevoRegistro(req.body);
-    const formData = req.body || {};
+    var error=await nuevoRegistro(req.body);
+    const formData = req.body;
     res.render("insertarRegistro", { formData , productos});
 });
 
@@ -29,8 +31,26 @@ rutas.get('/llenarDatos/:valor', async (req, res) => {
     var nombreProducto = req.params.valor;
     var product = await buscarPorNombre(nombreProducto);
     res.json({ datos: product });
+}) 
 
-})
+//---------------------------Ruta Modificar Registro------------------------
+rutas.get("/modificarRegistro/:id",async(req,res)=>{
+    var productos = await mostrarProducto();
+    var inventario=await buscarPorIDRegistro(req.params.id);
+    res.render("editarRegistro",{inventario,productos});
+});
+
+rutas.post("/modificarRegistro", async(req,res)=>{
+    var error=await modificarRegistro(req.body);
+    res.redirect("/inventario");
+});
+
+//---------------------------Ruta Borrar Registro----------------------------
+rutas.get("/borrarRegistro/:id",async(req,res)=>{
+    await borrarRegistro(req.params.id);
+    res.redirect("/inventario");
+});
+
 
 
 //---------------------------Ruta Productos----------------------------------
@@ -51,7 +71,7 @@ rutas.post("/insertarProducto", async(req,res)=>{
 
 //---------------------------Ruta Modificar Productos------------------------
 rutas.get("/modificarProducto/:id",async(req,res)=>{
-    var product=await buscarPorID(req.params.id);
+    var product=await buscarPorIDProducto(req.params.id);
     res.render("producto/editarProducto",{product});
 });
 

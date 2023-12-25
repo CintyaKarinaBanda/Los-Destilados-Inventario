@@ -1,36 +1,35 @@
 <%- include("./templates/encabezado") %>
 <%- include("./templates/menu") %>
 
-<%- include("../templates/encabezado") %>
-<%- include("../templates/menu") %>
-
 <div class="container mt-5">
     <div class="card">
         <div class="card-header">
-            <h1>Productos</h1>
+            <h1>Ventas</h1>
         </div>
         <div class="card-body">
             <table class="table table-hover">
                 <thead>
                     <tr>
-                        <th>Nombre</th>
-                        <th>Precio</th>
-                        <th>Costo</th>
-                        <th>Ganancia</th>
+                        <th>Número de Nota</th>
+                        <th>Nombre Cliente</th>
+                        <th>Producto</th>
+                        <th>Código QR</th>
+                        <th>Fecha de Compra</th>
                         <th>Editar/Borrar</th>
                     </tr>
                 </thead>
                 <tbody>
                     <% 
-                        productos.forEach((producto) => {
+                        inventario.forEach((registro) => {
                     %>
                     <tr>
-                        <td><%= producto.nombre %></td>
-                        <td><%= producto.precio %></td>
-                        <td><%= producto.costo %></td>
-                        <td><%= producto.ganancia %></td>
-                        <td><a href="/modificarProducto/<%= producto.id %>">Editar</a>
-                            <a href="/borrarProducto/<%= producto.id %>">Borrar</a>
+                        <td><%= registro.noNota %></td>
+                        <td><%= registro.nombreCliente %></td>
+                        <td><%= registro.producto %></td>
+                        <td><%= registro.codigoQR %></td>
+                        <td><%= registro.diaCompra %> / <%= registro.mesCompra %> / <%= registro.anioCompra %></td>
+                        <td><a href="/modificarRegistro/<%= registro.id %>">Editar</a>
+                            <a href="/borrarRegistro/<%= registro.id %>">Borrar</a>
                         </td>
                     </tr>
                     <% 
@@ -42,7 +41,5 @@
         <div class="card-footer"> </div>
     </div>
 </div>
-
-<%- include("../templates/pie") %>
 
 <%- include("./templates/pie") %>

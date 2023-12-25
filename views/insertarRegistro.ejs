@@ -2,7 +2,7 @@
 <%- include("./templates/menu") %>
 
 <div class="container mt-5">
-    <form action="/insertarRegistro" method="post">
+    <form action="/insertarRegistro" id="formulario" method="post">
         <div class="card">
             <div class="card-header">
                 <h1>Nueva Venta</h1>
@@ -11,13 +11,12 @@
                 <input class="form-control mb-3" type="text" name="noNota" id="noNota" placeholder="Número de Nota" value="<%= formData.noNota || '' %>" required autofocus>
                 <input class="form-control mb-3" type="text" name="nombreCliente" id="nombreCliente" placeholder="Nombre del Cliente"  value="<%= formData.nombreCliente || '' %>" required>
                 <div class="d-flex">
-                    <input class="form-control mb-3" type="text" name="diaCompra" id="diaCompra" placeholder="Día" value="<%= formData.diaCompra || '' %>" required>
+                    <input class="form-control mb-3" type="number" name="diaCompra" id="diaCompra" placeholder="Día" value="<%= formData.diaCompra || '' %>" required>
                     <select class="form-control mb-3" name="mesCompra" id="mesCompra"></select>
                     <select class="form-control mb-3" name="anioCompra" id="anioCompra"></select>
                 </div>
                 <input class="form-control mb-3" type="text" name="proveedor" id="proveedor" placeholder="Proveedor" value="<%= formData.costo || '' %>" required>
-                
-                <input class="form-control mb-3" type="text" list="productos" name="producto" id="producto" placeholder="Producto" value="<%= formData.ganancia || '' %>" required>
+                <input class="form-control mb-3" type="text" list="productos" name="producto" id="producto" placeholder="Producto" value="<%= formData.producto || '' %>" required>
                 <datalist id="productos">
                     <% 
                         productos.forEach((producto) => {
@@ -33,15 +32,20 @@
                     <input class="form-control mb-3" type="text" name="ganancia" id="ganancia" placeholder="Ganancia" value="<%= formData.ganancia || '' %>" required>
                 </div>
                 <div class="d-flex">
-                    <input class="form-control mb-3" type="text" name="anioQR" id="anioQR" placeholder="Año del código QR" value="<%= formData.precio || '' %>" required>
+                    <input class="form-control mb-3" type="number" name="anioQR" id="anioQR" placeholder="Año del código QR" value="<%= formData.precio || '' %>" required>
                     <input class="form-control mb-3" type="text" name="codigoQR" id="codigoQR" placeholder="Código QR" value="<%= formData.codigoQR || '' %>" required>
                 </div>
+                <label class="d-block text-center font-weight-bold mb-3" style="font-size: 1.5rem;">Utilidades del producto</label>
+                <div class="d-flex">
+                    <input class="form-control mb-3" type="text" name="sujetoA" id="sujetoA" placeholder="Andres" value="<%= formData.sujetoA || '' %>" required>
+                    <input class="form-control mb-3" type="text" name="sujetoB" id="sujetoB" placeholder="Erika" value="<%= formData.sujetoB || '' %>" required>
+                    <input class="form-control mb-3" type="text" name="sujetoC" id="sujetoC" placeholder="Negocio" value="<%= formData.sujetoC || '' %>" required>
+                </div> 
             </div>
             <div class="card-footer d-flex">
                 <button class="form-control btn btn-primary" type="button" style="flex: 1; margin-right: 5px;" id="btnVaciar" name="btnVaciar">Vaciar</button>
                 <button class="form-control btn btn-primary" type="submit" style="flex: 2;">Guardar Registro</button>
-            </div>
-                   
+            </div>  
         </div>
     </form>
 </div>

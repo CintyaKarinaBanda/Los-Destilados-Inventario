@@ -33,7 +33,7 @@ async function nuevoProducto(datos){
     return error;
 }
 
-async function buscarPorID (id){
+async function buscarPorIDProducto (id){
     var product;
     try {
         var producto=await conexion.doc(id).get();
@@ -59,14 +59,13 @@ async function buscarPorNombre(nombre) {
     } catch (error) {
         console.log("Error al recuperar los productos " + error);
     }
-    console.log(product);
     return product;
 }
 
 
 async function modificarProducto(datos){
     var error=1;
-    var resBuscar = await buscarPorID(datos.id);
+    var resBuscar = await buscarPorIDProducto(datos.id);
     if(resBuscar!=undefined){
         var product=new Producto(datos.id,datos);
         if (product.bandera==0) {
@@ -84,7 +83,7 @@ async function modificarProducto(datos){
 
 async function borrarProducto(id){
     var error=1;
-    var user = await buscarPorID(id);
+    var user = await buscarPorIDProducto(id);
     if(user!=undefined){
         try {
             await conexion.doc(id).delete();
@@ -100,7 +99,7 @@ async function borrarProducto(id){
 module.exports = {
     mostrarProducto, 
     nuevoProducto,
-    buscarPorID,
+    buscarPorIDProducto,
     modificarProducto,
     borrarProducto,
     buscarPorNombre

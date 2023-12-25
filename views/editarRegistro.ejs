@@ -1,0 +1,56 @@
+<%- include("./templates/encabezado") %>
+<%- include("./templates/menu") %>
+
+<div class="container mt-5">
+    <form action="/modificarRegistro" id="formulario" method="post">
+        <div class="card">
+            <div class="card-header">
+                <h1>Nueva Venta</h1>
+            </div>
+            <div class="card-body">
+                <input type="text" name="id" id="id" value="<%= inventario.id %>" hidden>
+                <input class="form-control mb-3" type="text" name="noNota" id="noNota" placeholder="Número de Nota" value="<%= inventario.noNota%>" required autofocus>
+                <input class="form-control mb-3" type="text" name="nombreCliente" id="nombreCliente" placeholder="Nombre del Cliente"  value="<%= inventario.nombreCliente %>" required>
+                <div class="d-flex">
+                    <input class="form-control mb-3" type="number" name="diaCompra" id="diaCompra" placeholder="Día" value="<%= inventario.diaCompra%>" required>
+                    <select class="form-control mb-3" name="mesCompra" id="mesCompra"></select>
+                    <select class="form-control mb-3" name="anioCompra" id="anioCompra"></select>
+                </div>
+                <input class="form-control mb-3" type="text" name="proveedor" id="proveedor" placeholder="Proveedor" value="<%= inventario.costo %>" required>
+                <input class="form-control mb-3" type="text" list="productos" name="producto" id="producto" placeholder="Producto" value="<%= inventario.producto %>" required>
+                <datalist id="productos">
+                    <% 
+                        productos.forEach((producto) => {
+                    %>
+                    <option value="<%= producto.nombre %>">
+                    <% 
+                        }); 
+                    %>  
+                </datalist>
+                <div class="d-flex">
+                    <input class="form-control mb-3" type="text" name="precio" id="precio" placeholder="Precio" value="<%= inventario.precio %>" required>
+                    <input class="form-control mb-3" type="text" name="costo" id="costo" placeholder="Costo" value="<%= inventario.costo %>">
+                    <input class="form-control mb-3" type="text" name="ganancia" id="ganancia" placeholder="Ganancia" value="<%= inventario.ganancia %>" required>
+                </div>
+                <div class="d-flex">
+                    <input class="form-control mb-3" type="number" name="anioQR" id="anioQR" placeholder="Año del código QR" value="<%= inventario.precio %>" required>
+                    <input class="form-control mb-3" type="text" name="codigoQR" id="codigoQR" placeholder="Código QR" value="<%= inventario.codigoQR %>" required>
+                </div>
+                <label class="d-block text-center font-weight-bold mb-3" style="font-size: 1.5rem;">Utilidades del producto</label>
+                <div class="d-flex">
+                    <input class="form-control mb-3" type="text" name="sujetoA" id="sujetoA" placeholder="Andres" value="<%= inventario.sujetoA %>" required>
+                    <input class="form-control mb-3" type="text" name="sujetoB" id="sujetoB" placeholder="Erika" value="<%= inventario.sujetoB %>" required>
+                    <input class="form-control mb-3" type="text" name="sujetoC" id="sujetoC" placeholder="Negocio" value="<%= inventario.sujetoC %>" required>
+                </div> 
+            </div>
+            <div class="card-footer d-flex">
+                <button class="form-control btn btn-primary" type="submit">Guardar Cambios</button>
+            </div>  
+        </div>
+    </form>
+</div>
+<br><br>
+
+<script type="module" src="/web/js/formularioRegistro.js"></script>
+
+<%- include("./templates/pie") %>

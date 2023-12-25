@@ -25,14 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
   selectAnio.value = anioActual;
   selectMes.value = new Date().getMonth() + 1;
 
-  document.getElementById("btnVaciar").addEventListener('click', function () {
-    var inputs = document.querySelectorAll('input');
-    inputs.forEach(function (input) {
-      input.value = '';
-    });
-  });
-
-  document.getElementById('producto').addEventListener('input', async function () {
+  document.getElementById('producto').addEventListener('input', function () {
     var valorInput = this.value;
     if (valorInput !== '') {
       fetch(`/llenarDatos/${valorInput}`)
@@ -42,9 +35,31 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById('precio').value = data.datos.precio || '';
             document.getElementById('costo').value = data.datos.costo || '';
             document.getElementById('ganancia').value = data.datos.ganancia || '';
+            document.getElementById('sujetoA').value = data.datos.sujetoA || '';
+            document.getElementById('sujetoB').value = data.datos.sujetoB || '';
+            document.getElementById('sujetoC').value = data.datos.sujetoC || '';
           } 
         })
         .catch(error => console.error('Error:', error));
     }
+  });
+
+  document.getElementById("formulario").addEventListener("submit", function (event) {
+    var ganancia = parseFloat(document.getElementById("ganancia").value);
+    var sujetoA = parseFloat(document.getElementById("sujetoA").value);
+    var sujetoB = parseFloat(document.getElementById("sujetoB").value);
+    var sujetoC = parseFloat(document.getElementById("sujetoC").value);
+    var suma = sujetoA + sujetoB + sujetoC;
+    if (suma !== ganancia) {
+        event.preventDefault();
+        alert("La suma de las utilidades no son correctas.");
+    }
+  });
+  
+  document.getElementById("btnVaciar").addEventListener('click', function () {
+    var inputs = document.querySelectorAll('input');
+    inputs.forEach(function (input) {
+      input.value = '';
+    });
   });
 });
