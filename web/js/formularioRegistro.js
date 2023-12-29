@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
       var sujetoB = parseFloat(document.getElementById("sujetoB").value);
       var sujetoC = parseFloat(document.getElementById("sujetoC").value);
       var suma = sujetoA + sujetoB + sujetoC;
-      let tolerancia = 0.05;
+      let tolerancia = 0.1;
       if (ganancia - suma > tolerancia) {
         event.preventDefault();
         alert("La suma de las utilidades no son correctas.");

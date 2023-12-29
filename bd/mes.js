@@ -34,7 +34,7 @@ async function buscarRegistroMensual(mes, anio){
         var busquedaDoc = busquedaSnap.docs[0];
         var busquedaObjeto = new CorteMensual (busquedaDoc.id, busquedaDoc.data());
         if (busquedaObjeto.bandera === 0) {
-            resultadoBusqueda = busquedaDoc;
+            resultadoBusqueda = busquedaObjeto.obtenerDatos;
         } 
     } catch (error) {
         console.log("Error al recuperar el resgistro mensual " + error);
@@ -44,14 +44,44 @@ async function buscarRegistroMensual(mes, anio){
 
 async function sumaMensual(datos){
     var error=1;
-    var resBuscar = await buscarRegistroMensual(datos.mes,datos.anio);
+    console.log(datos);
+    var resBuscar = await buscarRegistroMensual(datos.mesCompra,datos.anioCompra);
     if(resBuscar!=undefined){
-        resBuscar.sumaPrecio+=datos.precio;
-        resBuscar.sumaCosto=datos.costo;
-        resBuscar.sumaGanancia=datos.ganancia;
-        resBuscar.sumaSujetoA=datos.sujetoA;
-        resBuscar.sumaSujetoB=datos.sujetoB;
-        resBuscar.sumaSujetoC=datos.sujetoC;
+        console.log(resBuscar);
+        resBuscar.sumaPrecio+=parseFloat(datos.precio).toFixed(4);
+        resBuscar.sumaCosto+=parseFloat(datos.costo).toFixed(4);
+        resBuscar.sumaGanancia+=parseFloat(datos.ganancia).toFixed(4);
+        resBuscar.sumaSujetoA+=parseFloat(datos.sujetoA).toFixed(4);
+        resBuscar.sumaSujetoB+=parseFloat(datos.sujetoB).toFixed(4);
+        resBuscar.sumaSujetoC+=parseFloat(datos.sujetoC).toFixed(4);
+        console.log(resBuscar);
+        var corteMensual=new CorteMensual(resBuscar.id,resBuscar);
+        if (corteMensual.bandera==0) {
+            try {
+                await conexion.doc(corteMensual.id).set(corteMensual.obtenerDatos);
+                console.log("Corte Mensual Actualizado");
+                error=0;
+            } catch (err) {
+                console.log("Error la modificar la suma del corte mensual "+err);
+            }
+        }
+    }
+    return error;
+}
+
+async function restaMensual(datos){
+    var error=1;
+    console.log(datos);
+    var resBuscar = await buscarRegistroMensual(datos.mesCompra,datos.anioCompra);
+    if(resBuscar!=undefined){
+        console.log(resBuscar);
+        resBuscar.sumaPrecio-=parseFloat(datos.precio).toFixed(4);
+        resBuscar.sumaCosto-=parseFloat(datos.costo).toFixed(4);
+        resBuscar.sumaGanancia-=parseFloat(datos.ganancia).toFixed(4);
+        resBuscar.sumaSujetoA-=parseFloat(datos.sujetoA).toFixed(4);
+        resBuscar.sumaSujetoB-=parseFloat(datos.sujetoB).toFixed(4);
+        resBuscar.sumaSujetoC-=parseFloat(datos.sujetoC).toFixed(4);
+        console.log(resBuscar);
         var corteMensual=new CorteMensual(resBuscar.id,resBuscar);
         if (corteMensual.bandera==0) {
             try {
@@ -68,5 +98,6 @@ async function sumaMensual(datos){
 
 module.exports={
     buscarRegistroMensual,
-    sumaMensual
+    sumaMensual,
+    restaMensual
 }

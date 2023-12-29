@@ -1,7 +1,26 @@
 var rutas=require("express").Router();
+const session = require("express-session");
 var {mostrarProducto, nuevoProducto, modificarProducto, borrarProducto, buscarPorIDProducto, buscarPorNombre} = require("../bd/productobd.js");
 var {nuevoRegistro, mostrarRegistro, borrarRegistro, modificarRegistro, buscarPorIDRegistro} = require("../bd/registro.js");
-var {buscarRegistroMensual}=require("../bd/mes.js");
+var {buscarRegistroMensual,sumaMensual,restaMensual}=require("../bd/mes.js");
+
+
+rutas.use(session({
+        secret: "mi_secreto", // Cambia esto a una cadena de caracteres más segura
+        resave: false,
+        saveUninitialized: true,
+    })
+);
+  
+// Middleware para verificar si el usuario ha iniciado sesión
+const verificarSesion = (req, res, next) => {
+    if (req.session && req.session.usuario) {
+        return next();
+    } else {
+        res.redirect("/");
+    }
+};
+  
 
 //---------------------------Ruta Ingreso------------------------------------
 rutas.get("/", (req,res)=>{
@@ -9,8 +28,11 @@ rutas.get("/", (req,res)=>{
 });
 
 rutas.post("/iniciarSesion",(req,res)=>{
+    req.session.usuario = "nombreUsuario"; //Cambair
     res.redirect("/insertarRegistro");
 });
+
+rutas.use(verificarSesion);
 
 
 //---------------------------Ruta Iventario----------------------------------
@@ -31,6 +53,7 @@ rutas.post("/insertarRegistro", async(req,res)=>{
     req.body.fechaRegistro=new Date();
     var error=await nuevoRegistro(req.body);
     const formData = req.body;
+    await sumaMensual(req.body);
     res.render("ventas/insertarRegistro", { formData , productos});
 });
 
@@ -44,17 +67,21 @@ rutas.get('/llenarDatos/:valor', async (req, res) => {
 rutas.get("/modificarRegistro/:id",async(req,res)=>{
     var productos = await mostrarProducto();
     var inventario=await buscarPorIDRegistro(req.params.id);
+    await restaMensual(inventario);
     res.render("ventas/editarRegistro",{inventario,productos});
 });
 
 rutas.post("/modificarRegistro", async(req,res)=>{
     req.body.fechaRegistro=new Date();
     var error=await modificarRegistro(req.body);
+    await sumaMensual(req.body);
     res.redirect("/inventario");
 });
 
 //---------------------------Ruta Borrar Registro----------------------------
 rutas.get("/borrarRegistro/:id",async(req,res)=>{
+    var inventario=await buscarPorIDRegistro(req.params.id);
+    await restaMensual(inventario);
     await borrarRegistro(req.params.id);
     res.redirect("/inventario");
 });
@@ -96,9 +123,14 @@ rutas.get("/borrarProducto/:id",async(req,res)=>{
 
 
 //---------------------------Ruta Mostrar Corte-------------------------------
-rutas.get("/corte",async(req,res)=>{
-    await buscarRegistroMensual("12","2023");
-    res.render("corte/mostrarCorte");
+rutas.get("/corte", async (req, res) => {
+    res.render("corte/mostrarCorte", {corteMensual:{}});
+});
+
+
+rutas.post("/corte", async(req, res)=>{
+    var corteMensual= await buscarRegistroMensual(req.body.mesCompra,req.body.anioCompra);
+    res.render("corte/mostrarCorte", {corteMensual});
 });
 
 
