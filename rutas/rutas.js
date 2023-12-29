@@ -1,30 +1,37 @@
 var rutas=require("express").Router();
 var {mostrarProducto, nuevoProducto, modificarProducto, borrarProducto, buscarPorIDProducto, buscarPorNombre} = require("../bd/productobd.js");
 var {nuevoRegistro, mostrarRegistro, borrarRegistro, modificarRegistro, buscarPorIDRegistro} = require("../bd/registro.js");
+var {buscarRegistroMensual}=require("../bd/mes.js");
 
 //---------------------------Ruta Ingreso------------------------------------
 rutas.get("/", (req,res)=>{
     res.render("inicio");
 });
 
+rutas.post("/iniciarSesion",(req,res)=>{
+    res.redirect("/insertarRegistro");
+});
+
+
 //---------------------------Ruta Iventario----------------------------------
 rutas.get("/inventario", async(req,res)=>{
     var inventario = await mostrarRegistro();
-    res.render("inventario",{inventario});
+    res.render("ventas/inventario",{inventario});
 });
 
 //---------------------------Ruta Insertar Registro--------------------------
 rutas.get("/insertarRegistro", async(req,res)=>{
     var productos = await mostrarProducto();
     const formData = req.body || {};
-    res.render("insertarRegistro", { formData , productos});
+    res.render("ventas/insertarRegistro", { formData , productos});
 });
 
 rutas.post("/insertarRegistro", async(req,res)=>{
     var productos = await mostrarProducto();
+    req.body.fechaRegistro=new Date();
     var error=await nuevoRegistro(req.body);
     const formData = req.body;
-    res.render("insertarRegistro", { formData , productos});
+    res.render("ventas/insertarRegistro", { formData , productos});
 });
 
 rutas.get('/llenarDatos/:valor', async (req, res) => {
@@ -37,10 +44,11 @@ rutas.get('/llenarDatos/:valor', async (req, res) => {
 rutas.get("/modificarRegistro/:id",async(req,res)=>{
     var productos = await mostrarProducto();
     var inventario=await buscarPorIDRegistro(req.params.id);
-    res.render("editarRegistro",{inventario,productos});
+    res.render("ventas/editarRegistro",{inventario,productos});
 });
 
 rutas.post("/modificarRegistro", async(req,res)=>{
+    req.body.fechaRegistro=new Date();
     var error=await modificarRegistro(req.body);
     res.redirect("/inventario");
 });
@@ -87,5 +95,16 @@ rutas.get("/borrarProducto/:id",async(req,res)=>{
 });
 
 
+//---------------------------Ruta Mostrar Corte-------------------------------
+rutas.get("/corte",async(req,res)=>{
+    await buscarRegistroMensual("12","2023");
+    res.render("corte/mostrarCorte");
+});
+
+
+//---------------------------Ruta Salir---------------------------------------
+rutas.get("/logOut",(req,res)=>{
+    res.redirect("/");
+});
 
 module.exports=rutas;

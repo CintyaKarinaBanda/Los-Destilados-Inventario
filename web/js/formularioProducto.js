@@ -1,14 +1,16 @@
 document.addEventListener("DOMContentLoaded", function () {
-    document.getElementById("insertarProducto").addEventListener("submit", function (event) {
+    document.getElementById("productoFomulario").addEventListener("submit", function (event) {
         var ganancia = parseFloat(document.getElementById("ganancia").value);
         var sujetoA = parseFloat(document.getElementById("sujetoA").value);
         var sujetoB = parseFloat(document.getElementById("sujetoB").value);
         var sujetoC = parseFloat(document.getElementById("sujetoC").value);
-        var suma = sujetoA + sujetoB + sujetoC;
-        if (suma !== ganancia) {
+        var suma = parseFloat(sujetoA + sujetoB + sujetoC);
+        let tolerancia=parseFloat(0.05);
+        if ( (ganancia-suma) > tolerancia) {
             event.preventDefault();
-            alert("La suma de las utilidades no son correctas.");
+            alert("La suma de las utilidades no es correctas.");
         }
+        document.getElementById("nombre").value = document.getElementById("nombre").value.toUpperCase();
     });
 });
 

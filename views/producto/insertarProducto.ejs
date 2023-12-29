@@ -2,13 +2,13 @@
 <%- include("../templates/menu") %>
 
 <div class="container mt-5">
-    <form action="/insertarProducto" id="insertarProducto" method="post">
+    <form action="/insertarProducto" id="productoFomulario" method="post">
         <div class="card">
             <div class="card-header">
                 <h1>Nuevo Producto</h1>
             </div>
             <div class="card-body">
-                <input class="form-control mb-3" type="text" name="nombre" id="nombre" placeholder="Nombre" autofocus required>
+                <input class="form-control mb-3" type="text" name="nombre" id="nombre" placeholder="Nombre"  autofocus required>
                 <div class="d-flex">
                     <input class="form-control mb-3" type="text" name="precio" id="precio" placeholder="Precio" required>
                     <input class="form-control mb-3" type="text" name="costo" id="costo" placeholder="Costo" required>

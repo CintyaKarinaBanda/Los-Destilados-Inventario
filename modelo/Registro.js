@@ -18,6 +18,8 @@ class Registro{
         this.sujetoA=data.sujetoA;
         this.sujetoB=data.sujetoB;
         this.sujetoC=data.sujetoC;
+
+        this.fechaRegistro = data.fechaRegistro;
     }
 
     set id(id){
@@ -141,7 +143,9 @@ class Registro{
                 ganancia: this.ganancia,
                 sujetoA: this.sujetoA,
                 sujetoB: this.sujetoB,
-                sujetoC: this.sujetoC
+                sujetoC: this.sujetoC,
+
+                fechaRegistro: this.fechaRegistro
             }
         else{
             return{
@@ -160,7 +164,9 @@ class Registro{
                 ganancia: this.ganancia,
                 sujetoA: this.sujetoA,
                 sujetoB: this.sujetoB,
-                sujetoC: this.sujetoC
+                sujetoC: this.sujetoC,
+
+                fechaRegistro: this.fechaRegistro
             }
         }
     }

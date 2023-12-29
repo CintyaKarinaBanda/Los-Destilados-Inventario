@@ -1,7 +1,7 @@
 var conexion =require("./conexion").conexionInventario;
 var Registro =require("../modelo/Registro");
 
-async function mostrarRegistro() {
+/*async function mostrarRegistro() {
     var registros = [];
     try {
         var inventario = await conexion.get();
@@ -15,7 +15,27 @@ async function mostrarRegistro() {
         console.log("Error al recuperar registro en la BD "+error);
     }
     return registros;
+}*/
+
+async function mostrarRegistro() {
+    var registros = [];
+    try {
+        var inventario = await conexion.orderBy("fechaRegistro", "desc").get();
+        inventario.forEach((venta) => {
+            var registro = new Registro(venta.id, venta.data());
+            if (registro.bandera == 0) {
+                registros.push(registro.obtenerDatos);
+            }
+        });
+
+    } catch (error) {
+        console.log("Error al recuperar registro en la BD " + error);
+    }
+    console.log(registros);
+    return registros;
 }
+
+
 
 async function nuevoRegistro(datos){
     var registro=new Registro(null,datos);
