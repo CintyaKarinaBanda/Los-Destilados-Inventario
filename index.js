@@ -1,13 +1,17 @@
 var express=require("express");
 var rutas=require('./rutas/rutas');
-var cors=require("cors");
 var path=require("path");
+var session=require("cookie-session");
 
 var app=express();
 app.set("view engine","ejs");
-app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
+app.use(session({
+    name:"session",
+    keys:["holiwis"],
+    maxAge: 24 * 60 * 60 * 1000
+}));
 app.use('/web', express.static(path.join(__dirname, 'web')));
 app.use('/bd', express.static(path.join(__dirname, 'bd')));
 app.use("/", rutas);
