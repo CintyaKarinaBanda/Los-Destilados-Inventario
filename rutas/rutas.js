@@ -12,7 +12,6 @@ rutas.get("/", (req,res)=>{
 });
 
 rutas.post("/iniciarSesion", (req,res)=>{
-    console.log(process.env.PASSWORD===req.body.password);
     if(process.env.PASSWORD===req.body.password){
         req.session.password = process.env.PASSWORD;
         res.redirect("/insertarRegistro");
@@ -30,7 +29,6 @@ rutas.get("/inventario", verificarSesion, async(req,res)=>{
 
 //---------------------------Ruta Insertar Registro--------------------------
 rutas.get("/insertarRegistro", verificarSesion, async(req,res)=>{
-    console.log("Hola");
     var productos = await mostrarProducto();
     const formData = req.body || {};
     res.render("ventas/insertarRegistro", { formData , productos});
@@ -75,7 +73,6 @@ rutas.get("/borrarRegistro/:id", verificarSesion, async(req,res)=>{
 });
 
 
-
 //---------------------------Ruta Productos----------------------------------
 rutas.get("/mostrarProductos", verificarSesion, async(req,res)=>{
     var productos = await mostrarProducto();
@@ -114,7 +111,6 @@ rutas.get("/borrarProducto/:id", verificarSesion, async(req,res)=>{
 rutas.get("/corte", verificarSesion, async (req, res) => {
     res.render("corte/mostrarCorte", {corteMensual:{}});
 });
-
 
 rutas.post("/corte", async(req, res)=>{
     var corteMensual= await buscarRegistroMensual(req.body.mesCompra,req.body.anioCompra);
