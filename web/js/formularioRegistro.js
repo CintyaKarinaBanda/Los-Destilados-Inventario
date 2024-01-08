@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
     selectMes.appendChild(option);
   }
 
-  for (var i = anioActual - 1; i <= anioActual + 2; i++) {
+  for (var i = anioActual - 1; i <= anioActual + 1; i++) {
     var option = document.createElement("option");
     option.value = i;
     option.text = i;
@@ -39,8 +39,7 @@ document.addEventListener("DOMContentLoaded", function () {
           if (data != undefined) {
             document.getElementById("precio").value = data.datos.precio || "";
             document.getElementById("costo").value = data.datos.costo || "";
-            document.getElementById("ganancia").value =
-              data.datos.ganancia || "";
+            document.getElementById("ganancia").value = data.datos.ganancia || "";
             document.getElementById("sujetoA").value = data.datos.sujetoA || "";
             document.getElementById("sujetoB").value = data.datos.sujetoB || "";
             document.getElementById("sujetoC").value = data.datos.sujetoC || "";
@@ -57,8 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
       var sujetoC = parseFloat(document.getElementById("sujetoC").value);
       var suma = sujetoA + sujetoB + sujetoC;
       let tolerancia = 0.1;
-      if (ganancia - suma > tolerancia) {
-        event.preventDefault();
+      if (ganancia - suma > tolerancia) { event.preventDefault();
         alert("La suma de las utilidades no son correctas.");
       }
 

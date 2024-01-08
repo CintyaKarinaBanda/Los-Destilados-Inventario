@@ -7,12 +7,11 @@ admin.initializeApp({
 });
 
 var micuenta=admin.firestore();
-var conexionInventario=micuenta.collection("inventario");
 var conexionProducto=micuenta.collection("productos");
-var conexionMensual=micuenta.collection("registroMensual");
+var conecionMeses=micuenta.collection("meses");
+
 
 module.exports={
-    conexionInventario,
     conexionProducto,
-    conexionMensual
+    conecionMeses
 }

@@ -1,0 +1,87 @@
+const fs = require('fs'); // Necesitarás el módulo 'fs' para escribir en archivos
+
+async function obtenerDatos() {
+  try {
+    // Objeto para almacenar los datos
+    const datos = {
+      mensual: [],
+    };
+
+    // Obtener todos los documentos de la primera colección
+    const querySnapshot = await micuenta.collection("mensual").get();
+
+    // Iterar sobre los documentos de la primera colección
+    for (const doc of querySnapshot.docs) {
+      // Datos del documento de la primera colección
+      const datosPrimerColeccion = {
+        id: doc.id,
+        data: doc.data(),
+        ventas: [],
+      };
+
+      // Obtener todos los documentos de la segunda colección dentro del documento de la primera colección
+      const querySnapshot2 = await micuenta.collection("mensual").doc(doc.id).collection("ventas").get();
+
+      // Iterar sobre los documentos de la segunda colección
+      for (const doc2 of querySnapshot2.docs) {
+        // Datos del documento de la segunda colección
+        const datosSegundaColeccion = {
+          id: doc2.id,
+          data: doc2.data(),
+        };
+
+        // Agregar datos de la segunda colección al array dentro del objeto de la primera colección
+        datosPrimerColeccion.ventas.push(datosSegundaColeccion);
+      }
+
+      // Agregar datos de la primera colección al array principal
+      datos.mensual.push(datosPrimerColeccion);
+    }
+
+    // Convertir el objeto a una cadena JSON
+    const jsonString = JSON.stringify(datos, null, 2);
+
+    // Escribir la cadena JSON en un archivo (en este caso, 'datos.json')
+    fs.writeFileSync('datos.json', jsonString);
+
+    console.log('Datos descargados exitosamente en "datos.json"');
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+// Llamar a la función asíncrona
+obtenerDatos();
+
+
+async function insertarDatosDesdeJSON() {
+  try {
+    // Leer el archivo JSON
+    const jsonString = fs.readFileSync('datos.json', 'utf-8');
+
+    // Parsear la cadena JSON a un objeto JavaScript
+    const datosAInsertar = JSON.parse(jsonString);
+
+    // Iterar sobre el objeto para realizar las inserciones
+    for (const primerColeccion of datosAInsertar.mensual) {
+      // Insertar documento en la primera colección
+      const docRef = await micuenta.collection("mensual").add(primerColeccion.data);
+      console.log('Documento insertado en la primera colección con ID:', docRef.id);
+
+      // Iterar sobre los documentos de la segunda colección
+      for (const segundaColeccion of primerColeccion.ventas) {
+        // Insertar documento en la segunda colección dentro del documento de la primera colección
+        const docRef2 = await micuenta.collection("mensual").doc(docRef.id).collection("ventas").add(segundaColeccion.data);
+        console.log('Documento insertado en la segunda colección con ID:', docRef2.id);
+      }
+    }
+
+    console.log('Datos insertados exitosamente desde el archivo JSON');
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+// Llamar a la función asíncrona
+insertarDatosDesdeJSON();
+

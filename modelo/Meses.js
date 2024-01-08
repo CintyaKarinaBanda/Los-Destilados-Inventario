@@ -1,4 +1,4 @@
-class Producto{
+class Mes{
     constructor(id,data){
         this.bandera=0;
         this.id=id;
@@ -96,4 +96,4 @@ class Producto{
     }
 }
 
-module.exports=Producto;
+module.exports=Mes;

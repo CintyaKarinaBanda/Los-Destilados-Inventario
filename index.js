@@ -9,7 +9,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(session({
     name:"session",
-    keys:["holiwis"],
+    keys:[process.env.KEY],
     maxAge: 24 * 60 * 60 * 1000
 }));
 app.use('/web', express.static(path.join(__dirname, 'web')));

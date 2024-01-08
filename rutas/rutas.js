@@ -1,10 +1,9 @@
 var rutas=require("express").Router();
 var {mostrarProducto, nuevoProducto, modificarProducto, borrarProducto, buscarPorIDProducto, buscarPorNombre} = require("../bd/productobd.js");
-var {nuevoRegistro, mostrarRegistro, borrarRegistro, modificarRegistro, buscarPorIDRegistro} = require("../bd/registro.js");
-var {buscarRegistroMensual,sumaMensual,restaMensual}=require("../bd/mes.js");
+var {nuevoRegistro, mostrarRegistro, borrarRegistro, modificarRegistro, buscarPorIDRegistro,conexionMes} = require("../bd/ventas.js");
+var {buscarMes}=require("../bd/meses.js");
 var verificarSesion=require("../middlewares/session.js");
 require('dotenv').config();
-
 
 //---------------------------Ruta Ingreso------------------------------------
 rutas.get("/", (req,res)=>{
@@ -22,15 +21,27 @@ rutas.post("/iniciarSesion", (req,res)=>{
 
 
 //---------------------------Ruta Iventario----------------------------------
-rutas.get("/inventario", verificarSesion, async(req,res)=>{
+rutas.get("/inventario", verificarSesion, (req,res)=>{
+    res.render("ventas/inventario");
+});
+
+rutas.get("inventarioTabla",(req,res)=>{
+    res.render("ventas/tablaInventario");
+});
+
+rutas.get("/mesYanio", async(req,res)=>{
+    var parametro1 = req.query.parametro1;
+    var parametro2 = req.query.parametro2;
+    await conexionMes(parametro1,parametro2);
     var inventario = await mostrarRegistro();
-    res.render("ventas/inventario",{inventario});
+    res.redirect("/inventarioTabla");
+    //res.render("ventas/tablaInventario",{inventario});
 });
 
 //---------------------------Ruta Insertar Registro--------------------------
 rutas.get("/insertarRegistro", verificarSesion, async(req,res)=>{
     var productos = await mostrarProducto();
-    const formData = req.body || {};
+    var formData = {};
     res.render("ventas/insertarRegistro", { formData , productos});
 });
 
@@ -38,8 +49,8 @@ rutas.post("/insertarRegistro", async(req,res)=>{
     var productos = await mostrarProducto();
     req.body.fechaRegistro=new Date();
     var error=await nuevoRegistro(req.body);
-    const formData = req.body;
-    await sumaMensual(req.body);
+    var formData = req.body;
+    //await sumaMensual(req.body);
     res.render("ventas/insertarRegistro", { formData , productos});
 });
 

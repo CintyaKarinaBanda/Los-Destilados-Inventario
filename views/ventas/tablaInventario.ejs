@@ -1,0 +1,39 @@
+<%- include("./inventario") %>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Número de Nota</th>
+            <th>Nombre Cliente</th>
+            <th>Producto</th>
+            <th>Código QR</th>
+            <th>Fecha de Compra</th>
+            <th>Editar/Borrar</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% 
+            inventario.forEach((registro) => {
+        %>
+        <tr>
+            <td><%= registro.noNota %></td>
+            <td><%= registro.nombreCliente %></td>
+            <td><%= registro.producto %></td>
+            <td><%= registro.codigoQR %></td>
+            <td><%= registro.diaCompra %> / <%= registro.mesCompra %> / <%= registro.anioCompra %></td>
+            <td><a href="/modificarRegistro/<%= registro.id %>">Editar</a>
+                <a href="/borrarRegistro/<%= registro.id %>">Borrar</a>
+            </td>
+        </tr>
+        <% 
+            }); 
+        %>
+    </tbody>
+</table>
+</div>
+</div>
+<div class="card-footer"> </div>
+</div>
+</div>
+
+<%- include("../templates/pie") %>
