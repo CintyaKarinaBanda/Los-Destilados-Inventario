@@ -1,9 +1,10 @@
 var rutas=require("express").Router();
 var {mostrarProducto, nuevoProducto, modificarProducto, borrarProducto, buscarPorIDProducto, buscarPorNombre} = require("../bd/productobd.js");
 var {nuevoRegistro, mostrarRegistro, borrarRegistro, modificarRegistro, buscarPorIDRegistro,conexionMes} = require("../bd/ventas.js");
-var {buscarMes}=require("../bd/meses.js");
+var {buscarMes,sumaMensual,restaMensual}=require("../bd/meses.js");
 var verificarSesion=require("../middlewares/session.js");
 require('dotenv').config();
+
 
 //---------------------------Ruta Ingreso------------------------------------
 rutas.get("/", (req,res)=>{
@@ -21,21 +22,14 @@ rutas.post("/iniciarSesion", (req,res)=>{
 
 
 //---------------------------Ruta Iventario----------------------------------
-rutas.get("/inventario", verificarSesion, (req,res)=>{
-    res.render("ventas/inventario");
-});
-
-rutas.get("inventarioTabla",(req,res)=>{
-    res.render("ventas/tablaInventario");
-});
-
-rutas.get("/mesYanio", async(req,res)=>{
-    var parametro1 = req.query.parametro1;
-    var parametro2 = req.query.parametro2;
-    await conexionMes(parametro1,parametro2);
+rutas.get("/inventario", verificarSesion, async (req, res) => {
+    var parametro1 = req.query.parametro1 || (new Date().getMonth() + 1).toString();
+    var parametro2 = req.query.parametro2 || (new Date().getFullYear()).toString();
+    await conexionMes(parametro1, parametro2);
     var inventario = await mostrarRegistro();
-    res.redirect("/inventarioTabla");
-    //res.render("ventas/tablaInventario",{inventario});
+    const io = req.app.get('io');
+    io.emit('actualizarInventario', inventario);
+    res.render("ventas/inventario", { inventario });
 });
 
 //---------------------------Ruta Insertar Registro--------------------------
@@ -49,8 +43,12 @@ rutas.post("/insertarRegistro", async(req,res)=>{
     var productos = await mostrarProducto();
     req.body.fechaRegistro=new Date();
     var error=await nuevoRegistro(req.body);
+    var inventario = await mostrarRegistro();
     var formData = req.body;
-    //await sumaMensual(req.body);
+    console.log(inventario);
+    await sumaMensual(req.body);
+    inventario = await mostrarRegistro();
+    console.log(inventario);
     res.render("ventas/insertarRegistro", { formData , productos});
 });
 
@@ -120,11 +118,12 @@ rutas.get("/borrarProducto/:id", verificarSesion, async(req,res)=>{
 
 //---------------------------Ruta Mostrar Corte-------------------------------
 rutas.get("/corte", verificarSesion, async (req, res) => {
-    res.render("corte/mostrarCorte", {corteMensual:{}});
-});
-
-rutas.post("/corte", async(req, res)=>{
-    var corteMensual= await buscarRegistroMensual(req.body.mesCompra,req.body.anioCompra);
+    var parametro1 = req.query.parametro1 || (new Date().getMonth() + 1).toString();
+    var parametro2 = req.query.parametro2 || (new Date().getFullYear()).toString();
+    var corteMensual= await buscarMes(parametro1,parametro2);
+    console.log(corteMensual);
+    const io = req.app.get('io');
+    io.emit('actualizarCorte', corteMensual);
     res.render("corte/mostrarCorte", {corteMensual});
 });
 

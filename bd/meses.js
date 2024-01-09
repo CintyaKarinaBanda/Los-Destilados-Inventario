@@ -29,9 +29,11 @@ async function buscarMes(mes, anio){
     try {
         var mesSnap= await conexion.where('mes', '==', mes).where("anio", '==', anio).get();
         var mesDoc= await mesSnap.docs[0];
-        mesObjeto = new Mes(mesDoc.id, mesDoc.data());
-        if (mesObjeto.bandera==0) {
-            resultado=mesObjeto.obtenerDatos;
+        if(mesDoc!=undefined){
+            mesObjeto = new Mes(mesDoc.id, mesDoc.data());
+            if (mesObjeto.bandera==0) {
+                resultado=mesObjeto.obtenerDatos;
+            }
         }
     } catch (error) {
         console.log("Error el buscar el mes: ",error);

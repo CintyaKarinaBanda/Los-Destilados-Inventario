@@ -25,11 +25,6 @@ document.addEventListener("DOMContentLoaded", function () {
   selectAnio.value = anioActual;
   selectMes.value = new Date().getMonth() + 1;
 
-  var inputs = document.querySelectorAll("input");
-  inputs.forEach(function (input) {
-    input.value = input.value.toUpperCase();
-  });
-
   document.getElementById("producto").addEventListener("input", function () {
     var valorInput = this.value;
     if (valorInput !== "") {

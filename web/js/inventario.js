@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function enviarValoresAlServidor() {
         var valorSelect1 = selectMes.value;
         var valorSelect2 = selectAnio.value;
-        fetch(`/corte?parametro1=${encodeURIComponent(valorSelect1)}&parametro2=${encodeURIComponent(valorSelect2)}`)
+        fetch(`/inventario?parametro1=${encodeURIComponent(valorSelect1)}&parametro2=${encodeURIComponent(valorSelect2)}`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`La solicitud falló con el código ${response.status}`);
@@ -45,24 +45,29 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Manejar actualizaciones del servidor
-    socket.on('actualizarCorte', function (corte) {
-        actualizarTabla(corte);
+    socket.on('actualizarInventario', function (inventario) {
+        actualizarTabla(inventario);
     });
 
-    function actualizarTabla(corte) {
+    function actualizarTabla(inventario) {
         var tbody = document.querySelector('tbody');
         tbody.innerHTML = '';
+        inventario.forEach(function (registro) {
             var row = document.createElement('tr');
             row.innerHTML = `
-                  <td>${corte.sumaPrecio}</td>
-                  <td>${corte.sumaCosto}</td>
-                  <td>${corte.sumaGanancia}</td>
-                  <td>${corte.sumaSujetoA}</td>
-                  <td>${corte.sumaSujetoB}</td>
-                  <td>${corte.sumaSujetoC}</td>
+                  <td>${registro.noNota}</td>
+                  <td>${registro.nombreCliente}</td>
+                  <td>${registro.producto}</td>
+                  <td>${registro.codigoQR}</td>
+                  <td>${registro.diaCompra} / ${registro.mesCompra} / ${registro.anioCompra}</td>
+                  <td>
+                      <a href="/modificarRegistro/${registro.id}">Editar</a>
+                      <a href="/borrarRegistro/${registro.id}">Borrar</a>
+                  </td>
               `;
-            tbody.appendChild(row);
 
+            tbody.appendChild(row);
+        });
     }
 
 

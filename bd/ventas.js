@@ -1,12 +1,16 @@
 var conexionMeses =require("./conexion").conecionMeses;
 var Registro =require("../modelo/Registro");
-var {verificarMes}=require("./meses");
+var {verificarMes,buscarMes}=require("./meses");
 var conexion;
 
 async function conexionMes(mes, anio){
     try {
-        var resultado=await verificarMes(mes, anio);
-        conexion= await conexionMeses.doc(resultado.id).collection("ventas");
+        var resultado=await buscarMes(mes, anio);
+        if (resultado!=undefined){
+            conexion= await conexionMeses.doc(resultado.id).collection("ventas");
+        } else{
+            conexion=undefined;
+        }
     } catch (error) {
         console.log("Error en la funión conexión mes: ", error);
     }
@@ -29,11 +33,12 @@ async function mostrarRegistro() {
 } 
 
 async function nuevoRegistro(datos){
+    var resultado= await verificarMes(datos.mesCompra,datos.anioCompra)
     var registro=new Registro(null,datos);
     var error=1;
     if (registro.bandera==0) {
         try {
-            await conexion.doc().set(registro.obtenerDatos);
+            await conexionMeses.doc(resultado.id).collection("ventas").doc().set(registro.obtenerDatos);
             console.log("Se ha insertado el nuevo registro a la BD");
             bandera=1;
             error=0;
