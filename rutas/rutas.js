@@ -43,12 +43,8 @@ rutas.post("/insertarRegistro", async(req,res)=>{
     var productos = await mostrarProducto();
     req.body.fechaRegistro=new Date();
     var error=await nuevoRegistro(req.body);
-    var inventario = await mostrarRegistro();
     var formData = req.body;
-    console.log(inventario);
     await sumaMensual(req.body);
-    inventario = await mostrarRegistro();
-    console.log(inventario);
     res.render("ventas/insertarRegistro", { formData , productos});
 });
 

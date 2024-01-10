@@ -43,22 +43,19 @@ async function buscarMes(mes, anio){
 
 async function actualizarCorteMensual(datos, operacion) {
     var error = 0;
-
     try {
         var resBuscar = await verificarMes(datos.mesCompra, datos.anioCompra);
-
         if (resBuscar) {
-            const parseFloatAndFix = (value) => parseFloat(value).toFixed(4);
-
-            resBuscar.sumaPrecio = operacion(resBuscar.sumaPrecio, parseFloatAndFix(datos.precio));
-            resBuscar.sumaCosto = operacion(resBuscar.sumaCosto, parseFloatAndFix(datos.costo));
-            resBuscar.sumaGanancia = operacion(resBuscar.sumaGanancia, parseFloatAndFix(datos.ganancia));
-            resBuscar.sumaSujetoA = operacion(resBuscar.sumaSujetoA, parseFloatAndFix(datos.sujetoA));
-            resBuscar.sumaSujetoB = operacion(resBuscar.sumaSujetoB, parseFloatAndFix(datos.sujetoB));
-            resBuscar.sumaSujetoC = operacion(resBuscar.sumaSujetoC, parseFloatAndFix(datos.sujetoC));
-
+            const parseFloatAndFix = (value) => parseFloat(value).toFixed(2);
+            resBuscar.sumaPrecio = operacion(parseFloatAndFix(resBuscar.sumaPrecio), parseFloatAndFix(datos.precio));
+            resBuscar.sumaCosto = operacion(parseFloatAndFix(resBuscar.sumaCosto), parseFloatAndFix(datos.costo));
+            resBuscar.sumaGanancia = operacion(parseFloatAndFix(resBuscar.sumaGanancia), parseFloatAndFix(datos.ganancia));
+            resBuscar.sumaSujetoA = operacion(parseFloatAndFix(resBuscar.sumaSujetoA), parseFloatAndFix(datos.sujetoA));
+            resBuscar.sumaSujetoB = operacion(parseFloatAndFix(resBuscar.sumaSujetoB), parseFloatAndFix(datos.sujetoB));
+            resBuscar.sumaSujetoC = operacion(parseFloatAndFix(resBuscar.sumaSujetoC), parseFloatAndFix(datos.sujetoC));
+            console.log(resBuscar);
             var corteMensual = new Mes(resBuscar.id, resBuscar);
-
+            console.log(corteMensual.obtenerDatos);
             if (corteMensual.bandera === 0) {
                 await conexion.doc(corteMensual.id).set(corteMensual.obtenerDatos);
                 console.log("Corte Mensual Actualizado");
@@ -73,11 +70,12 @@ async function actualizarCorteMensual(datos, operacion) {
 }
 
 async function sumaMensual(datos) {
-    return actualizarCorteMensual(datos, (a, b) => a + b);
+    console.log(datos);
+    return actualizarCorteMensual(datos, (a, b) => parseFloat(a) + parseFloat(b));
 }
 
 async function restaMensual(datos) {
-    return actualizarCorteMensual(datos, (a, b) => a - b);
+    return actualizarCorteMensual(datos, (a, b) => parseFloat(a)-parseFloat(b));
 }
 
 
