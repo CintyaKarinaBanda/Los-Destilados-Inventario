@@ -27,15 +27,30 @@ rutas.get("/inventario", verificarSesion, async (req, res) => {
     var parametro2 = req.query.parametro2 || (new Date().getFullYear()).toString();
     await conexionMes(parametro1, parametro2);
     var inventario = await mostrarRegistro();
+    console.log(inventario);
     const io = req.app.get('io');
-    io.emit('actualizarInventario', inventario);
+    io.emit('actualizarInventario',  inventario); //reenviar datos
     res.render("ventas/inventario", { inventario });
 });
+/*
+rutas.get("/inventario", verificarSesion, async (req, res) => {
+    var parametro1 = req.query.parametro1 || (new Date().getMonth() + 1).toString();
+    var parametro2 = req.query.parametro2 || (new Date().getFullYear()).toString();
+    await conexionMes(parametro1, parametro2);
+    var inventario = await mostrarRegistro();
+    
+    const io = req.app.get('io');
+    io.emit('actualizarInventario', inventario);
+    res.render("ventas/inventario", { inventario, parametro1, parametro2 });
+});*/
 
 //---------------------------Ruta Insertar Registro--------------------------
 rutas.get("/insertarRegistro", verificarSesion, async(req,res)=>{
     var productos = await mostrarProducto();
-    var formData = {};
+    var formData = {
+        mesCompra: (new Date().getMonth() + 1).toString(),
+        anioCompra:(new Date().getFullYear()).toString()
+    };
     res.render("ventas/insertarRegistro", { formData , productos});
 });
 
@@ -63,10 +78,11 @@ rutas.get("/modificarRegistro/:id", verificarSesion, async(req,res)=>{
 });
 
 rutas.post("/modificarRegistro", async(req,res)=>{
+    console.log("...",req.body.mesCompra);
     req.body.fechaRegistro=new Date();
     var error=await modificarRegistro(req.body);
     await sumaMensual(req.body);
-    res.redirect("/inventario");
+    res.redirect(`/inventario?parametro1=${encodeURIComponent(req.body.mesCompra)}&parametro2=${encodeURIComponent(req.body.anioCompra)}`);
 });
 
 //---------------------------Ruta Borrar Registro----------------------------
@@ -74,7 +90,7 @@ rutas.get("/borrarRegistro/:id", verificarSesion, async(req,res)=>{
     var inventario=await buscarPorIDRegistro(req.params.id);
     await restaMensual(inventario);
     await borrarRegistro(req.params.id);
-    res.redirect("/inventario");
+    res.redirect(`/inventario?parametro1=${encodeURIComponent(req.body.mesCompra)}&parametro2=${encodeURIComponent(req.body.anioCompra)}`);
 });
 
 

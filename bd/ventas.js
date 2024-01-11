@@ -16,6 +16,10 @@ async function conexionMes(mes, anio){
     }
 }
 
+async function cambiarMes(mes, anio){
+    
+}
+
 async function mostrarRegistro() {
     var registros=[];
     try {
@@ -62,22 +66,6 @@ async function buscarPorIDRegistro (id){
     }
     return registro;
 }
-
-/*async function buscarPorNombre(nombre) {
-    var product={};
-    try {
-        var productoSnap = await conexion.where('nombre', '==', nombre).get();
-        var productoDoc = productoSnap.docs[0];
-        var productoObjeto = new Registro(productoDoc.id, productoDoc.data());
-        if (productoObjeto.bandera === 0) {
-            product = productoObjeto.obtenerDatos;
-        } 
-    } catch (error) {
-        console.log("Error al recuperar los productos " + error);
-    }
-    console.log(product);
-    return product;
-}*/
 
 async function modificarRegistro(datos){
     var error=1;

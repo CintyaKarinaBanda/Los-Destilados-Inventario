@@ -16,10 +16,11 @@ async function verificarMes(mes, anio){
                 sumaSujetoB: 0,
                 sumaSujetoC: 0
             });
+            console.log("Se creo un nuevo Registro Mensual verificarMes()");
             resultadoBusqueda = await buscarMes(mes, anio);
         } 
     } catch (error) {
-        console.log("Error al recuperar el resgistro mensual " + error);
+        console.log("Error al recuperar el resgistro mensual: verificarMes() " + error);
     }
     return resultadoBusqueda;
 }
@@ -34,9 +35,10 @@ async function buscarMes(mes, anio){
             if (mesObjeto.bandera==0) {
                 resultado=mesObjeto.obtenerDatos;
             }
+            console.log("Registro mensual recuperado buscarMes()");
         }
     } catch (error) {
-        console.log("Error el buscar el mes: ",error);
+        console.log("Error al recuperar el registro mensual: buscarMes() ",error);
     }
     return resultado;
 }
@@ -53,16 +55,14 @@ async function actualizarCorteMensual(datos, operacion) {
             resBuscar.sumaSujetoA = operacion(parseFloatAndFix(resBuscar.sumaSujetoA), parseFloatAndFix(datos.sujetoA));
             resBuscar.sumaSujetoB = operacion(parseFloatAndFix(resBuscar.sumaSujetoB), parseFloatAndFix(datos.sujetoB));
             resBuscar.sumaSujetoC = operacion(parseFloatAndFix(resBuscar.sumaSujetoC), parseFloatAndFix(datos.sujetoC));
-            console.log(resBuscar);
             var corteMensual = new Mes(resBuscar.id, resBuscar);
-            console.log(corteMensual.obtenerDatos);
             if (corteMensual.bandera === 0) {
                 await conexion.doc(corteMensual.id).set(corteMensual.obtenerDatos);
                 console.log("Corte Mensual Actualizado");
             }
         }
     } catch (err) {
-        console.log("Error al modificar la suma del corte mensual: ", err);
+        console.log("Error al modificar las cantidades del corte mensual: ", err);
         error = 1;
     }
 
@@ -70,7 +70,6 @@ async function actualizarCorteMensual(datos, operacion) {
 }
 
 async function sumaMensual(datos) {
-    console.log(datos);
     return actualizarCorteMensual(datos, (a, b) => parseFloat(a) + parseFloat(b));
 }
 

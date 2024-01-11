@@ -45,11 +45,13 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Manejar actualizaciones del servidor
-    socket.on('actualizarInventario', function (inventario) {
+    socket.on('actualizarInventario', function (inventario){
         actualizarTabla(inventario);
     });
 
     function actualizarTabla(inventario) {
+        //selectAnio.value = parametro2;
+        //selectMes.value = parametro1;
         var tbody = document.querySelector('tbody');
         tbody.innerHTML = '';
         inventario.forEach(function (registro) {
@@ -78,5 +80,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     selectMes.addEventListener('change', enviarValoresAlServidor);
     selectAnio.addEventListener('change', enviarValoresAlServidor);
+
     enviarValoresAlServidor();
 });
