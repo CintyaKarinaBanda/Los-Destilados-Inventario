@@ -21,36 +21,24 @@ rutas.post("/iniciarSesion", (req,res)=>{
 });
 
 
+
 //---------------------------Ruta Iventario----------------------------------
 rutas.get("/inventario", verificarSesion, async (req, res) => {
     var parametro1 = req.query.parametro1 || (new Date().getMonth() + 1).toString();
     var parametro2 = req.query.parametro2 || (new Date().getFullYear()).toString();
     await conexionMes(parametro1, parametro2);
     var inventario = await mostrarRegistro();
-    console.log(inventario);
     const io = req.app.get('io');
-    io.emit('actualizarInventario',  inventario); //reenviar datos
-    res.render("ventas/inventario", { inventario });
+    io.emit('actualizarInventario',  inventario);
+    res.render("ventas/inventario", { inventario ,parametro1, parametro2});
 });
-/*
-rutas.get("/inventario", verificarSesion, async (req, res) => {
-    var parametro1 = req.query.parametro1 || (new Date().getMonth() + 1).toString();
-    var parametro2 = req.query.parametro2 || (new Date().getFullYear()).toString();
-    await conexionMes(parametro1, parametro2);
-    var inventario = await mostrarRegistro();
-    
-    const io = req.app.get('io');
-    io.emit('actualizarInventario', inventario);
-    res.render("ventas/inventario", { inventario, parametro1, parametro2 });
-});*/
+
+
 
 //---------------------------Ruta Insertar Registro--------------------------
 rutas.get("/insertarRegistro", verificarSesion, async(req,res)=>{
     var productos = await mostrarProducto();
-    var formData = {
-        mesCompra: (new Date().getMonth() + 1).toString(),
-        anioCompra:(new Date().getFullYear()).toString()
-    };
+    var formData = {};
     res.render("ventas/insertarRegistro", { formData , productos});
 });
 
@@ -74,13 +62,14 @@ rutas.get("/modificarRegistro/:id", verificarSesion, async(req,res)=>{
     var productos = await mostrarProducto();
     var inventario=await buscarPorIDRegistro(req.params.id);
     await restaMensual(inventario);
+    
     res.render("ventas/editarRegistro",{inventario,productos});
 });
 
 rutas.post("/modificarRegistro", async(req,res)=>{
-    console.log("...",req.body.mesCompra);
+    await borrarRegistro(req.body.id);
     req.body.fechaRegistro=new Date();
-    var error=await modificarRegistro(req.body);
+    var error=await nuevoRegistro(req.body);
     await sumaMensual(req.body);
     res.redirect(`/inventario?parametro1=${encodeURIComponent(req.body.mesCompra)}&parametro2=${encodeURIComponent(req.body.anioCompra)}`);
 });
@@ -90,8 +79,9 @@ rutas.get("/borrarRegistro/:id", verificarSesion, async(req,res)=>{
     var inventario=await buscarPorIDRegistro(req.params.id);
     await restaMensual(inventario);
     await borrarRegistro(req.params.id);
-    res.redirect(`/inventario?parametro1=${encodeURIComponent(req.body.mesCompra)}&parametro2=${encodeURIComponent(req.body.anioCompra)}`);
+    res.redirect(`/inventario?parametro1=${encodeURIComponent(inventario.mesCompra)}&parametro2=${encodeURIComponent(inventario.anioCompra)}`);
 });
+
 
 
 //---------------------------Ruta Productos----------------------------------
@@ -128,16 +118,17 @@ rutas.get("/borrarProducto/:id", verificarSesion, async(req,res)=>{
 });
 
 
+
 //---------------------------Ruta Mostrar Corte-------------------------------
 rutas.get("/corte", verificarSesion, async (req, res) => {
     var parametro1 = req.query.parametro1 || (new Date().getMonth() + 1).toString();
     var parametro2 = req.query.parametro2 || (new Date().getFullYear()).toString();
     var corteMensual= await buscarMes(parametro1,parametro2);
-    console.log(corteMensual);
     const io = req.app.get('io');
     io.emit('actualizarCorte', corteMensual);
     res.render("corte/mostrarCorte", {corteMensual});
 });
+
 
 
 //---------------------------Ruta Salir---------------------------------------

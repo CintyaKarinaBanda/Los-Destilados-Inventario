@@ -74,6 +74,7 @@ async function modificarRegistro(datos){
         var registro=new Registro(datos.id,datos);
         if (registro.bandera==0) {
             try {
+                await conexionMes(registro.mesCompra, registro.anioCompra);
                 await conexion.doc(registro.id).set(registro.obtenerDatos);
                 console.log("Registro modificado");
                 error=0;
@@ -108,3 +109,4 @@ module.exports = {
     borrarRegistro,
     conexionMes
   };
+  

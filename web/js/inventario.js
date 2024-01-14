@@ -24,8 +24,10 @@ document.addEventListener("DOMContentLoaded", function () {
         selectAnio.appendChild(option);
     }
 
-    selectAnio.value = anioActual;
-    selectMes.value = (new Date().getMonth() + 1);
+    var valueMes=document.getElementById("valueMes");
+    var valueAnio=document.getElementById("valueAnio");
+    selectAnio.value = valueAnio.value || anioActual;
+    selectMes.value = valueMes.value || new Date().getMonth() + 1;
 
     // Configurar el WebSocket en el cliente
     const socket = io();
@@ -50,8 +52,8 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     function actualizarTabla(inventario) {
-        //selectAnio.value = parametro2;
-        //selectMes.value = parametro1;
+        valueAnio.value = inventario.anioCompra;
+        valueMes.value = inventario.mesCompra;
         var tbody = document.querySelector('tbody');
         tbody.innerHTML = '';
         inventario.forEach(function (registro) {

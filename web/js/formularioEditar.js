@@ -24,6 +24,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
   var valueMes=document.getElementById("valueMes");
   var valueAnio=document.getElementById("valueAnio");
+  console.log(valueMes.value,valueAnio.value);
+
   selectAnio.value = valueAnio.value || anioActual;
   selectMes.value = valueMes.value || new Date().getMonth() + 1;
 
@@ -64,10 +66,4 @@ document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("codigoQR").value = document.getElementById("codigoQR").value.toUpperCase();
     });
 
-  document.getElementById("btnVaciar").addEventListener("click", function () {
-    var inputs = document.querySelectorAll("input");
-    inputs.forEach(function (input) {
-      input.value = "";
-    });
   });
-});
