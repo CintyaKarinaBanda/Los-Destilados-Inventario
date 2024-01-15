@@ -85,3 +85,24 @@ async function insertarDatosDesdeJSON() {
 // Llamar a la función asíncrona
 insertarDatosDesdeJSON();
 
+<!--
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Concepto</th>
+            <th>Cantidad</th>
+            <th>Editar/Borrar</th>
+        </tr>
+    </thead>
+    <tbody>
+    <% inventario.forEach((registro)=> {%>
+        <tr>
+            <td><%= registro.noNota || '' %></td>
+            <td><%= registro.nombreCliente || '' %></td>
+            <td><a href="/modificarRegistro/<%= registro.id %>">Editar</a>
+                <a href="/borrarRegistro/<%= registro.id %>">Borrar</a>
+            </td>
+        </tr>
+    <% }); %>
+    </tbody>
+</table>-->

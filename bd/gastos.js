@@ -1,44 +1,44 @@
 var conexionMeses =require("./conexion").conecionMeses;
-var Registro =require("../modelo/Registro");
+var Gasto =require("../modelo/Gasto");
 var {verificarMes,buscarMes}=require("./meses");
 var conexion;
 
-async function conexionMesVenta(mes, anio){
+async function conexionMesGasto(mes, anio){
     try {
         var resultado=await buscarMes(mes, anio);
         if (resultado!=undefined){
-            conexion= await conexionMeses.doc(resultado.id).collection("ventas");
+            conexion= await conexionMeses.doc(resultado.id).collection("gastos");
         } else{
-            conexion = undefined;
+            conexion=undefined;
         }
     } catch (error) {
         console.log("Error en la funión conexión mes: ", error);
     }
 }
 
-async function mostrarRegistro() {
-    var registros=[];
+async function mostrarGastos() {
+    var gastos=[];
     try {
-        var inventario = await conexion.orderBy("fechaRegistro", "desc").get();
-        inventario.forEach((venta) => {
-            var registro = new Registro(venta.id, venta.data());
-            if (registro.bandera == 0) {
-                registros.push(registro.obtenerDatos);
+        var listado = await conexion.orderBy("fechaRegistro", "desc").get();
+        listado.forEach((fila) => {
+            var gasto = new Gasto(fila.id, fila.data());
+            if (gasto.bandera == 0) {
+                gastos.push(gasto.obtenerDatos);
             }
         });
     }catch (error) {
-        console.log('Error al mostrar el inventario mensual: ', error);
+        console.log('Error al mostrar los gastos mensuales: ', error);
     }
-    return registros;
+    return gastos;
 } 
 
-async function nuevoRegistro(datos){
-    var resultado= await verificarMes(datos.mesCompra,datos.anioCompra)
-    var registro=new Registro(null,datos);
+async function nuevoGasto(datos){
+    var resultado= await verificarMes(datos.mesGasto,datos.anioGasto)
+    var gasto=new Gasto(null,datos);
     var error=1;
-    if (registro.bandera==0) {
+    if (gasto.bandera==0) {
         try {
-            await conexion.doc().set(registro.obtenerDatos);
+            await conexion.doc().set(gasto.obtenerDatos);
             console.log("Se ha insertado el nuevo registro a la BD");
             bandera=1;
             error=0;
@@ -49,21 +49,21 @@ async function nuevoRegistro(datos){
     return error;
 }
 
-async function buscarPorIDRegistro (id){
-    var registro;
+async function buscarPorIDGasto (id){
+    var gasto;
     try {
-        var venta=await conexion.doc(id).get();
-        ventaObjeto = new Registro(venta.id, venta.data());
-        if (ventaObjeto.bandera==0) {
-            registro=ventaObjeto.obtenerDatos;
+        var bill=await conexion.doc(id).get();
+        billObject = new Registro(bill.id, bill.data());
+        if (billObject.bandera==0) {
+            gasto=billObject.obtenerDatos;
         }
     } catch (error) {
         console.log("Error al recuperar el registro  "+error);
     }
-    return registro;
+    return gasto;
 }
 
-/*async function modificarRegistro(datos){
+/*async function modificarGasto(datos){
     var error=1;
     var resBuscar = await buscarPorIDRegistro(datos.id);
     if(resBuscar!=undefined){
@@ -80,12 +80,12 @@ async function buscarPorIDRegistro (id){
         }
     }
     return error;
-}
-*/
-async function borrarRegistro(id){
+}*/
+
+async function borrarGasto(id){
     var error=1;
-    var registro = await buscarPorIDRegistro(id);
-    if(registro!=undefined){
+    var gasto = await buscarPorIDGasto(id);
+    if(gasto!=undefined){
         try {
             await conexion.doc(id).delete();
             console.log("Se ha borrado el registro");
@@ -98,11 +98,10 @@ async function borrarRegistro(id){
 }
 
 module.exports = {
-    mostrarRegistro, 
-    nuevoRegistro,
-    buscarPorIDRegistro,
-    //modificarRegistro,
-    borrarRegistro,
-    conexionMesVenta
+    mostrarGastos, 
+    nuevoGasto,
+    buscarPorIDGasto,
+    borrarGasto,
+    conexionMesGasto
   };
   

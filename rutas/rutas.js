@@ -1,7 +1,8 @@
 var rutas=require("express").Router();
 var {mostrarProducto, nuevoProducto, modificarProducto, borrarProducto, buscarPorIDProducto, buscarPorNombre} = require("../bd/productobd.js");
-var {nuevoRegistro, mostrarRegistro, borrarRegistro, modificarRegistro, buscarPorIDRegistro,conexionMes} = require("../bd/ventas.js");
+var {nuevoRegistro, mostrarRegistro, borrarRegistro, buscarPorIDRegistro,conexionMesVenta} = require("../bd/ventas.js");
 var {buscarMes,sumaMensual,restaMensual}=require("../bd/meses.js");
+var {nuevoGasto, conexionMesGasto}=require("../bd/gastos.js");
 var verificarSesion=require("../middlewares/session.js");
 require('dotenv').config();
 
@@ -26,7 +27,7 @@ rutas.post("/iniciarSesion", (req,res)=>{
 rutas.get("/inventario", verificarSesion, async (req, res) => {
     var parametro1 = req.query.parametro1 || (new Date().getMonth() + 1).toString();
     var parametro2 = req.query.parametro2 || (new Date().getFullYear()).toString();
-    await conexionMes(parametro1, parametro2);
+    await conexionMesVenta(parametro1, parametro2);
     var inventario = await mostrarRegistro();
     const io = req.app.get('io');
     io.emit('actualizarInventario',  inventario);
@@ -45,6 +46,7 @@ rutas.get("/insertarRegistro", verificarSesion, async(req,res)=>{
 rutas.post("/insertarRegistro", async(req,res)=>{
     var productos = await mostrarProducto();
     req.body.fechaRegistro=new Date();
+    await conexionMesVenta(req.body.mesCompra, req.body.anioCompra);
     var error=await nuevoRegistro(req.body);
     var formData = req.body;
     await sumaMensual(req.body);
@@ -127,6 +129,22 @@ rutas.get("/corte", verificarSesion, async (req, res) => {
     console.log(corteMensual);
     io.emit('actualizarCorte', corteMensual);
     res.render("corte/mostrarCorte", {corteMensual});
+});
+
+
+
+//---------------------------Ruta Insertar Gasto-------------------------------
+rutas.get("/gastos",(req,res)=>{
+    var parametro1 = req.query.parametro1 || (new Date().getMonth() + 1).toString();
+    var parametro2 = req.query.parametro2 || (new Date().getFullYear()).toString();
+    res.render("gastos/insertarGasto",{parametro1,parametro2});
+});
+
+rutas.post("/insertarGasto",async(req,res)=>{
+    req.body.fechaRegistro=new Date();
+    await conexionMesGasto(req.body.mesGasto, req.body.anioGasto);
+    var error=await nuevoGasto(req.body);
+    res.redirect("/gastos");
 });
 
 
