@@ -1,0 +1,49 @@
+<%- include("../templates/encabezado") %>
+<%- include("../templates/menu") %>
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-header">
+                <h1>Ventas</h1>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <input id="valueMes" type="text" value="<%= parametro1 || '' %>" hidden>
+                    <input id="valueAnio" type="text" value="<%= parametro2 || '' %>" hidden>
+                    <div class="d-flex">
+                        <input class="form-control mb-3" type="text" name="concepto" id="concepto" placeholder="Concepto" required>
+                        <input class="form-control mb-3" type="text" name="cantidad" id="cantidad" placeholder="Cantidad" required>
+                    </div> 
+                    <div class="d-flex">
+                        <select class="form-control mb-3" name="mesCompra" id="mesCompra" ></select>
+                        <select class="form-control mb-3" name="anioCompra" id="anioCompra" ></select>
+                    </div>
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Concepto</th>
+                                <th>Cantidad</th>
+                                <th>Editar/Borrar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <% inventario.forEach((registro)=> {%>
+                            <tr>
+                                <td><%= registro.noNota || '' %></td>
+                                <td><%= registro.nombreCliente || '' %></td>
+                                <td><a href="/modificarRegistro/<%= registro.id %>">Editar</a>
+                                    <a href="/borrarRegistro/<%= registro.id %>">Borrar</a>
+                                </td>
+                            </tr>
+                        <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer"> </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.3/socket.io.js"></script>
+    <script type="module" src="/web/js/inventario.js"></script>
+
+<%- include("../templates/pie") %>

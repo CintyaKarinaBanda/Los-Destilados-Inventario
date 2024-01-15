@@ -62,7 +62,6 @@ rutas.get("/modificarRegistro/:id", verificarSesion, async(req,res)=>{
     var productos = await mostrarProducto();
     var inventario=await buscarPorIDRegistro(req.params.id);
     await restaMensual(inventario);
-    
     res.render("ventas/editarRegistro",{inventario,productos});
 });
 
@@ -125,6 +124,7 @@ rutas.get("/corte", verificarSesion, async (req, res) => {
     var parametro2 = req.query.parametro2 || (new Date().getFullYear()).toString();
     var corteMensual= await buscarMes(parametro1,parametro2);
     const io = req.app.get('io');
+    console.log(corteMensual);
     io.emit('actualizarCorte', corteMensual);
     res.render("corte/mostrarCorte", {corteMensual});
 });
