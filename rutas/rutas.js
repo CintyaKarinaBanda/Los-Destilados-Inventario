@@ -2,7 +2,7 @@ var rutas=require("express").Router();
 var {mostrarProducto, nuevoProducto, modificarProducto, borrarProducto, buscarPorIDProducto, buscarPorNombre} = require("../bd/productobd.js");
 var {nuevoRegistro, mostrarRegistro, borrarRegistro, buscarPorIDRegistro,conexionMesVenta} = require("../bd/ventas.js");
 var {buscarMes,sumaMensual,restaMensual}=require("../bd/meses.js");
-var {nuevoGasto, conexionMesGasto}=require("../bd/gastos.js");
+var {nuevoGasto, conexionMesGasto, mostrarGastos}=require("../bd/gastos.js");
 var verificarSesion=require("../middlewares/session.js");
 require('dotenv').config();
 
@@ -134,14 +134,21 @@ rutas.get("/corte", verificarSesion, async (req, res) => {
 
 
 //---------------------------Ruta Insertar Gasto-------------------------------
-rutas.get("/gastos",(req,res)=>{
+rutas.get("/gastos",async(req,res)=>{
     var parametro1 = req.query.parametro1 || (new Date().getMonth() + 1).toString();
     var parametro2 = req.query.parametro2 || (new Date().getFullYear()).toString();
-    res.render("gastos/insertarGasto",{parametro1,parametro2});
+    await conexionMesGasto(parametro1,parametro2);
+    var gastos = await mostrarGastos();
+    const io = req.app.get('io');
+    console.log(req.body);
+    io.emit('actualizarGastos', gastos);
+    res.render("gastos/insertarGasto",{gastos});
 });
 
 rutas.post("/insertarGasto",async(req,res)=>{
+    
     req.body.fechaRegistro=new Date();
+    console.log(req.body);
     await conexionMesGasto(req.body.mesGasto, req.body.anioGasto);
     var error=await nuevoGasto(req.body);
     res.redirect("/gastos");

@@ -1,39 +1,68 @@
 <%- include("../templates/encabezado") %>
 <%- include("../templates/menu") %>
-    <div class="container mt-5">
-        <div class="card">
-            <div class="card-header">
-                <h1>Ventas</h1>
+<div class="container mt-5 mb-5">
+    <div class="card">
+        <div class="card-header">
+            <h1>Gastos</h1>
+        </div>
+        <div class="card-body">
+            <div class="d-flex mb-3">
+                <select class="form-control mr-3" name="mes" id="mes"></select>
+                <select class="form-control" name="anio" id="anio"></select>
             </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <div class="d-flex">
-                        <select class="form-control mb-3" name="mes" id="mes"></select>
-                        <select class="form-control mb-3" name="anio" id="anio"></select>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="table-responsive">
+                        <h4 class="text-center mb-4">Agregar</h4>
+                        <form action="/insertarGasto" method="post">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <input class="form-control mb-3" type="text" name="concepto" id="concepto"
+                                        placeholder="Concepto" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <input class="form-control mb-3" type="text" name="cantidad" id="cantidad"
+                                        placeholder="Cantidad" required>
+                                </div>
+                                <input id="mesGasto" name="mesGasto" type="text" >
+                                <input id="anioGasto" name="anioGasto" type="text" >
+                            </div>
+                            <button class="form-control btn btn-primary mb-3" type="submit">Insertar</button>
+                        </form>
                     </div>
-                    <form action="/insertarGasto" method="post">
-                        
-                        <div class="row">
-                            <div class="col-md-8"> 
-                                <input class="form-control mb-3" type="text" name="concepto" id="concepto" placeholder="Concepto" required>
-                            </div>
-                            <div class="col-md-4">
-                                <input class="form-control mb-3" type="text" name="cantidad" id="cantidad" placeholder="Cantidad" required>
-                            </div>
-                            <!-- Mover los campos mesGasto y anioGasto dentro del formulario -->
-                            <input id="mesGasto" name="mesGasto" type="text" value="<%= parametro1 %>" >
-                            <input id="anioGasto" name="anioGasto" type="text" value="<%= parametro2 %>" >
-                        </div>
-                        
-                        <button class="form-control btn btn-primary mb-3" type="submit">Insertar</button>
-                    </form>
+                </div>
+                <div class="col-md-6">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Concepto</th>
+                                    <th>Cantidad</th>
+                                    <th>Editar/Borrar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% gastos.forEach((gasto)=> {%>
+                                <tr>
+                                    <td><%= gasto.concepto || '' %></td>
+                                    <td><%= gasto.cantidad || '' %></td>
+                                    <td><a href="/modificarRegistro/<%= gasto.id %>">Editar</a>
+                                        <a href="/borrarRegistro/<%= gasto.id %>">Borrar</a>
+                                    </td>
+                                </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-            <div class="card-footer"> </div>
         </div>
+        <div class="card-footer"> </div>
     </div>
+</div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.3/socket.io.js"></script>
-    <script type="module" src="/web/js/gastos.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.3/socket.io.js"></script>
+<script type="module" src="/web/js/gastos.js"></script>
 
 <%- include("../templates/pie") %>

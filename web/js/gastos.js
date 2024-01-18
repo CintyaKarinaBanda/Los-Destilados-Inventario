@@ -24,16 +24,21 @@ document.addEventListener("DOMContentLoaded", function () {
         selectAnio.appendChild(option);
     }
 
-    var valueMes=document.getElementById("valueMes");
-    var valueAnio=document.getElementById("valueAnio");
-    selectAnio.value = valueAnio.value || anioActual;
-    selectMes.value = valueMes.value || new Date().getMonth() + 1;
+    //var valueMes=document.getElementById("valueMes");
+    //var valueAnio=document.getElementById("valueAnio");
+    selectAnio.value =  anioActual;
+    selectMes.value = new Date().getMonth() + 1;
 
     // Configurar el WebSocket en el cliente
     const socket = io();
 
+    var valueMes=document.getElementById("valueMes");
+    var valueAnio=document.getElementById("valueAnio");
+
     // Función para enviar valores al servidor
     function enviarValoresAlServidor() {
+        valueMes.value=selectMes.value;
+        valueAnio.value=selectAnio.value;
         var valorSelect1 = selectMes.value;
         var valorSelect2 = selectAnio.value;
         fetch(`/gastos?parametro1=${encodeURIComponent(valorSelect1)}&parametro2=${encodeURIComponent(valorSelect2)}`)
@@ -47,27 +52,24 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Manejar actualizaciones del servidor
-    socket.on('actualizarInventario', function (inventario){
-        actualizarTabla(inventario);
+    socket.on('actualizarGastos', function (gastos){
+        console.log(gastos);
+        actualizarTabla(gastos);
     });
 
-    function actualizarTabla(inventario) {
-        valueAnio.value = inventario.anioCompra;
-        valueMes.value = inventario.mesCompra;
+    function actualizarTabla(gastos) {
+        //valueAnio.value = inventario.anioCompra;
+        //valueMes.value = inventario.mesCompra;
         var tbody = document.querySelector('tbody');
         tbody.innerHTML = '';
-        inventario.forEach(function (registro) {
+        gastos.forEach(function (gasto) {
             var row = document.createElement('tr');
             row.innerHTML = `
-                  <td>${registro.noNota}</td>
-                  <td>${registro.nombreCliente}</td>
-                  <td>${registro.producto}</td>
-                  <td>${registro.codigoQR}</td>
-                  <td>${registro.diaCompra} / ${registro.mesCompra} / ${registro.anioCompra}</td>
-                  <td>
-                      <a href="/modificarRegistro/${registro.id}">Editar</a>
-                      <a href="/borrarRegistro/${registro.id}">Borrar</a>
-                  </td>
+                <td>${gasto.concepto || '' }</td>
+                <td>${gasto.cantidad || '' }</td>
+                <td><a href="/modificarRegistro/${gasto.id}">Editar</a>
+                    <a href="/borrarRegistro/${gasto.id}">Borrar</a>
+                </td>
               `;
 
             tbody.appendChild(row);

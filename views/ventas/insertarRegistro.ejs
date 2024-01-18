@@ -15,7 +15,7 @@
                     <select class="form-control mb-3" name="mesCompra" id="mesCompra" ></select>
                     <select class="form-control mb-3" name="anioCompra" id="anioCompra" ></select>
                 </div>
-                <input class="form-control mb-3" type="text" name="proveedor" id="proveedor" placeholder="Proveedor" value="<%= formData.costo || '' %>" required>
+                <input class="form-control mb-3" type="text" name="proveedor" id="proveedor" placeholder="Proveedor" value="<%= formData.costo || Fernanda %>" required>
                 <input class="form-control mb-3" type="text" list="productos" name="producto" id="producto" placeholder="Producto" value="<%= formData.producto || '' %>" required>
                 <datalist id="productos">
                     <% 
