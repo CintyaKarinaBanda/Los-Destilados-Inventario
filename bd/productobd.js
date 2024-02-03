@@ -42,7 +42,7 @@ async function buscarPorIDProducto (id){
             product=productoObjeto.obtenerDatos;
         }
     } catch (error) {
-        console.log("Error al recuperar los productos  "+error);
+        console.log("Error al recuperar el producto  "+error);
     }
     return product;
 }
@@ -57,7 +57,7 @@ async function buscarPorNombre(nombre) {
             product = productoObjeto.obtenerDatos;
         } 
     } catch (error) {
-        console.log("Error al recuperar los productos " + error);
+        console.log("Error al recuperar el producto " + error);
     }
     return product;
 }

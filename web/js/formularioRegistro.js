@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", function () {
       var suma = sujetoA + sujetoB + sujetoC;
       let tolerancia = 0.1;
       if (ganancia - suma > tolerancia) { event.preventDefault();
-        alert("La suma de las utilidades no son correctas.");
+        alert("La suma de las utilidades no es correcta.");
       }
 
       document.getElementById("noNota").value = document.getElementById("noNota").value.toUpperCase();

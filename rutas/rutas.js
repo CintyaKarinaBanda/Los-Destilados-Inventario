@@ -13,7 +13,7 @@ rutas.get("/", (req,res)=>{
 });
 
 rutas.post("/iniciarSesion", (req,res)=>{
-    if(process.env.PASSWORD===req.body.password){
+    if(process.env.PASSWORD===req.body.password || process.env.PASSWORDADMIN===req.body.password){
         req.session.password = process.env.PASSWORD;
         res.redirect("/insertarRegistro");
     }  else {
@@ -47,7 +47,7 @@ rutas.post("/insertarRegistro", async(req,res)=>{
     var productos = await mostrarProducto();
     req.body.fechaRegistro=new Date();
     await conexionMesVenta(req.body.mesCompra, req.body.anioCompra);
-    var error=await nuevoRegistro(req.body);
+    await nuevoRegistro(req.body);
     var formData = req.body;
     await sumaMensual(req.body);
     res.render("ventas/insertarRegistro", { formData , productos});
@@ -146,7 +146,6 @@ rutas.get("/gastos",async(req,res)=>{
 });
 
 rutas.post("/insertarGasto",async(req,res)=>{
-    
     req.body.fechaRegistro=new Date();
     console.log(req.body);
     await conexionMesGasto(req.body.mesGasto, req.body.anioGasto);

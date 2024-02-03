@@ -50,19 +50,20 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     function actualizarTabla(corte) {
-        var tbody = document.querySelector('tbody');
-        tbody.innerHTML = '';
+        if (corte && typeof corte === 'object') {
+            var tbody = document.querySelector('tbody');
+            tbody.innerHTML = '';
             var row = document.createElement('tr');
             row.innerHTML = `
-                  <td>${corte.sumaPrecio}</td>
-                  <td>${corte.sumaCosto}</td>
-                  <td>${corte.sumaGanancia}</td>
-                  <td>${corte.sumaSujetoA}</td>
-                  <td>${corte.sumaSujetoB}</td>
-                  <td>${corte.sumaSujetoC}</td>
-              `;
+                <td>${corte.sumaPrecio || ''}</td>
+                <td>${corte.sumaCosto || ''}</td>
+                <td>${corte.sumaGanancia || ''}</td>
+                <td>${corte.sumaSujetoA || ''}</td>
+                <td>${corte.sumaSujetoB || ''}</td>
+                <td>${corte.sumaSujetoC || ''}</td>
+            `;
             tbody.appendChild(row);
-
+        }
     }
 
 
