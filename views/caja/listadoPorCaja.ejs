@@ -1,0 +1,44 @@
+<%- include("../templates/encabezado") %>
+<%- include("../templates/menu") %>
+
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h1 class="fw-bold">Caja</h1>
+            <a href="/insertarCaja" class="btn btn-primary text-center">Añadir</a>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Destilado</th>
+                            <th>Piezas</th>
+                            <th>Militros</th>
+                            <th>Precio</th>
+                            <th>Editar/Borrar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% caja.forEach((producto) => { %>
+                        <tr>
+                            <td><%= producto.destilado %></td>
+                            <td><%= producto.piezas %></td>
+                            <td><%= producto.militros %></td>
+                            <td><%= producto.precio %></td>
+                            <td>
+                                <a href="/editarCaja/<%= producto.id %>">Editar</a>
+                                <a href="/borrarProductoPorCaja/<%= producto.id %>">Borrar</a>
+                            </td>
+                        </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer">
+        </div>
+    </div>
+</div>
+
+<%- include("../templates/pie") %>

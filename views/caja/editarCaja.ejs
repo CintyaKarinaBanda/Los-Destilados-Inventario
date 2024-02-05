@@ -1,0 +1,26 @@
+<%- include("../templates/encabezado") %>
+<%- include("../templates/menu") %>
+
+<div class="container mt-5">
+    <form action="/editarCaja" id="cajaFomulario" method="post">
+        <div class="card">
+            <div class="card-header">
+                <h1>Nuevo Producto Por Caja</h1>
+            </div>
+            <div class="card-body">
+                <input class="form-control mb-3" type="text" name="destilado" id="destilado" placeholder="Destilado" value="<%= product.destilado %>" autofocus required>
+                <div class="d-flex">
+                    <input class="form-control mb-3" type="text" name="piezas" id="piezas" placeholder="Piezas" value="<%= product.piezas %>" required>
+                    <input class="form-control mb-3" type="text" name="militros" id="militros" placeholder="Militros"  value="<%= product.militros %>" required>
+                    <input class="form-control mb-3" type="text" name="precio" id="precio" placeholder="Precio" value="<%= product.precio %>" required>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button class="form-control btn btn-primary" type="submit">Guardar producto</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<%- include("../templates/pie") %>

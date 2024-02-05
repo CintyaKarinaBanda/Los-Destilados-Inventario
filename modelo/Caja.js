@@ -4,7 +4,7 @@ class Caja{
         this.id=id;
         this.destilado=data.destilado;
         this.piezas=data.piezas;
-        this.militiros=data.militiros;
+        this.militros=data.militros;
         this.precio=data.precio;
     }
 
@@ -18,8 +18,8 @@ class Caja{
     set piezas(piezas){
         piezas.length>0?this._piezas=piezas: this.bandera=1;
     }
-    set militiros(militiros){
-        militiros.length>0?this._militiros=militiros: this.bandera=1;
+    set militros(militros){
+        militros.length>0?this._militros=militros: this.bandera=1;
     }
     set precio(precio){
         precio.length>0?this._precio=precio: this.bandera=1;
@@ -35,8 +35,8 @@ class Caja{
     get piezas(){
         return this._piezas;
     }
-    get militiros(){
-        return this._militiros;
+    get militros(){
+        return this._militros;
     }
     get precio(){
         return this._precio;
@@ -48,14 +48,14 @@ class Caja{
                 id: this.id,
                 destilado: this.destilado,
                 piezas: this.piezas,
-                militiros: this.militiros,
+                militros: this.militros,
                 precio: this.precio
             }
         else{
             return{
                 destilado: this.destilado,
                 piezas: this.piezas,
-                militiros: this.militiros,
+                militros: this.militros,
                 precio: this.precio
             }
         }

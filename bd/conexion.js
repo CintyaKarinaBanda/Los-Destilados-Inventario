@@ -9,11 +9,14 @@ admin.initializeApp({
 
 var micuenta=admin.firestore();
 var conexionProducto=micuenta.collection("productos");
+var conexionProductoPorCaja=micuenta.collection("productosPorCaja");
 var conecionMeses=micuenta.collection("meses");
 
 var  db = admin.database();
+
 module.exports={
     conexionProducto,
     conecionMeses,
+    conexionProductoPorCaja,
     db
 }

@@ -3,6 +3,7 @@ var {mostrarProducto, nuevoProducto, modificarProducto, borrarProducto, buscarPo
 var {nuevoRegistro, mostrarRegistro, borrarRegistro, buscarPorIDRegistro,conexionMesVenta} = require("../bd/ventas.js");
 var {buscarMes,sumaMensual,restaMensual}=require("../bd/meses.js");
 var {nuevoGasto, conexionMesGasto, mostrarGastos}=require("../bd/gastos.js");
+var {mostrarProductosPoCaja, nuevoProductoPoCaja, modificarProductoPoCaja, borrarProductoPoCaja, buscarPorIDProductoPoCaja} = require("../bd/caja.js");
 var verificarSesion=require("../middlewares/session.js");
 require('dotenv').config();
 
@@ -152,6 +153,42 @@ rutas.post("/insertarGasto",async(req,res)=>{
     var error=await nuevoGasto(req.body);
     res.redirect("/gastos");
 });
+
+
+
+//---------------------------Ruta Caja----------------------------------------
+rutas.get("/caja", async(req,res)=>{
+    var caja = await mostrarProductosPoCaja();
+    res.render("caja/listadoPorCaja",{caja});
+});
+
+//---------------------------Ruta Insertar Caja-------------------------------
+rutas.get("/insertarCaja", (req,res)=>{
+    res.render("caja/insertarCaja");
+});
+
+rutas.post("/insertarCaja", async(req,res)=>{
+    var error=await nuevoProductoPoCaja(req.body);
+    res.redirect("/caja");
+});
+
+//---------------------------Ruta Modificar Productos------------------------
+rutas.get("/editarCaja/:id", verificarSesion, async(req,res)=>{
+    var product=await buscarPorIDProductoPoCaja(req.params.id);
+    res.render("caja/editarCaja",{product});
+});
+
+rutas.post("/editarCaja", async(req,res)=>{
+    var error=await modificarProductoPoCaja(req.body);
+    res.redirect("/caja");
+});
+
+//---------------------------Ruta Borrar Caja----------------------------
+rutas.get("/borrarProductoPorCaja/:id", verificarSesion, async(req,res)=>{
+    await borrarProductoPoCaja(req.params.id);
+    res.redirect("/caja");
+});
+
 
 
 
