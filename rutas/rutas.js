@@ -191,7 +191,6 @@ rutas.get("/borrarProductoPorCaja/:id", verificarSesion, async(req,res)=>{
 
 
 
-
 //---------------------------Ruta Salir---------------------------------------
 rutas.get("/logOut",(req,res)=>{
     req.session = null;
