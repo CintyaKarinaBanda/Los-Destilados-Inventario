@@ -173,9 +173,6 @@ rutas.get("/borrarGasto/:id", verificarSesion,async(req,res)=>{
 });
 
 
-
-
-
 //---------------------------Ruta Caja----------------------------------------
 rutas.get("/caja", verificarSesion, async(req,res)=>{
     var caja = await mostrarProductosPoCaja();
