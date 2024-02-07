@@ -1,0 +1,32 @@
+<%- include("../templates/encabezado") %>
+<%- include("../templates/menu") %>
+
+<div class="container mt-5">
+    <form action="/modificarGasto"  id="productoFomulario" method="post">
+        <div class="card">
+            <div class="card-header">
+                <h1>Modificar Gasto</h1>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <input id="id" name="id" type="text" value="<%= gasto.id%>" hidden>
+                    <div class="col-md-8">                                                           
+                        <input class="form-control mb-3" type="text" name="concepto" id="concepto" value="<%= gasto.concepto %>" placeholder="Concepto" required>
+                    </div>
+                    <div class="col-md-4">
+                        <input class="form-control mb-3" type="text" name="cantidad" id="cantidad" value="<%= gasto.cantidad%>" placeholder="Cantidad" required>
+                    </div>
+                    <input id="mesGasto" name="mesGasto" type="text" value="<%= gasto.mesGasto%>" hidden>
+                    <input id="anioGasto" name="anioGasto" type="text" value="<%= gasto.anioGasto%>" hidden>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button class="form-control btn btn-primary" type="submit">Guardar cambio</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script src="/web/js/formularioProducto.js"></script>
+
+<%- include("../templates/pie") %>       

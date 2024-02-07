@@ -2,7 +2,7 @@ var rutas=require("express").Router();
 var {mostrarProducto, nuevoProducto, modificarProducto, borrarProducto, buscarPorIDProducto, buscarPorNombre} = require("../bd/productobd.js");
 var {nuevoRegistro, mostrarRegistro, borrarRegistro, buscarPorIDRegistro,conexionMesVenta} = require("../bd/ventas.js");
 var {buscarMes,sumaMensual,restaMensual}=require("../bd/meses.js");
-var {nuevoGasto, conexionMesGasto, mostrarGastos}=require("../bd/gastos.js");
+var {nuevoGasto, conexionMesGasto, mostrarGastos, buscarPorIDGasto, borrarGasto}=require("../bd/gastos.js");
 var {mostrarProductosPoCaja, nuevoProductoPoCaja, modificarProductoPoCaja, borrarProductoPoCaja, buscarPorIDProductoPoCaja} = require("../bd/caja.js");
 var verificarSesion=require("../middlewares/session.js");
 require('dotenv').config();
@@ -127,43 +127,63 @@ rutas.get("/corte", verificarSesion, async (req, res) => {
     var parametro2 = req.query.parametro2 || (new Date().getFullYear()).toString();
     var corteMensual= await buscarMes(parametro1,parametro2);
     const io = req.app.get('io');
-    console.log(corteMensual);
     io.emit('actualizarCorte', corteMensual);
     res.render("corte/mostrarCorte", {corteMensual});
 });
 
 
 
-//---------------------------Ruta Insertar Gasto-------------------------------
-rutas.get("/gastos",async(req,res)=>{
+//---------------------------Ruta Mostrar Gasto-------------------------------
+rutas.get("/gastos", verificarSesion,async(req,res)=>{
     var parametro1 = req.query.parametro1 || (new Date().getMonth() + 1).toString();
     var parametro2 = req.query.parametro2 || (new Date().getFullYear()).toString();
     await conexionMesGasto(parametro1,parametro2);
     var gastos = await mostrarGastos();
     const io = req.app.get('io');
-    console.log(req.body);
+    var gasto={};
     io.emit('actualizarGastos', gastos);
-    res.render("gastos/insertarGasto",{gastos});
+    res.render("gastos/insertarGasto",{gastos,gasto});
 });
 
-rutas.post("/insertarGasto",async(req,res)=>{
+//---------------------------Ruta Insertar Gastos------------------------------
+rutas.post("/insertarGasto", async(req,res)=>{
     req.body.fechaRegistro=new Date();
-    console.log(req.body);
-    await conexionMesGasto(req.body.mesGasto, req.body.anioGasto);
+    await conexionMesVenta(req.body.mes, req.body.anio);
+    var error= await nuevoGasto(req.body);
+    res.redirect("/gastos");
+})
+
+//---------------------------Ruta Modificar Gastos-----------------------------
+rutas.get("/modificarGasto/:id", verificarSesion,async(req,res)=>{
+    var gasto=await buscarPorIDGasto(req.params.id);
+    res.render("gastos/editarGasto", {gasto});
+});
+
+rutas.post("/modificarGasto",async(req,res)=>{
+    await borrarGasto(req.body.id);
+    req.body.fechaRegistro=new Date();
     var error=await nuevoGasto(req.body);
+    res.redirect('/gastos');
+});
+
+//---------------------------Ruta Modificar Gastos-----------------------------
+rutas.get("/borrarGasto/:id", verificarSesion,async(req,res)=>{
+    await borrarGasto(req.params.id);
     res.redirect("/gastos");
 });
 
 
 
+
+
 //---------------------------Ruta Caja----------------------------------------
-rutas.get("/caja", async(req,res)=>{
+rutas.get("/caja", verificarSesion, async(req,res)=>{
     var caja = await mostrarProductosPoCaja();
     res.render("caja/listadoPorCaja",{caja});
 });
 
 //---------------------------Ruta Insertar Caja-------------------------------
-rutas.get("/insertarCaja", (req,res)=>{
+rutas.get("/insertarCaja", verificarSesion, (req,res)=>{
     res.render("caja/insertarCaja");
 });
 
@@ -172,7 +192,7 @@ rutas.post("/insertarCaja", async(req,res)=>{
     res.redirect("/caja");
 });
 
-//---------------------------Ruta Modificar Productos------------------------
+//---------------------------Ruta Modificar Caja------------------------------
 rutas.get("/editarCaja/:id", verificarSesion, async(req,res)=>{
     var product=await buscarPorIDProductoPoCaja(req.params.id);
     res.render("caja/editarCaja",{product});
@@ -184,7 +204,7 @@ rutas.post("/editarCaja", async(req,res)=>{
 });
 
 //---------------------------Ruta Borrar Caja----------------------------
-rutas.get("/borrarProductoPorCaja/:id", verificarSesion, async(req,res)=>{
+rutas.get("/borrarProductoPorCaja/:id", verificarSesion, verificarSesion, async(req,res)=>{
     await borrarProductoPoCaja(req.params.id);
     res.redirect("/caja");
 });

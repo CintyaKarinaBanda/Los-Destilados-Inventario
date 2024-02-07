@@ -34,10 +34,11 @@ async function mostrarGastos() {
 
 async function nuevoGasto(datos){
     var resultado= await verificarMes(datos.mesGasto,datos.anioGasto)
-    var gasto=new Gasto(null,datos);
+    var gasto=new Gasto(null,datos);    
     var error=1;
     if (gasto.bandera==0) {
         try {
+            console.log(conexion);
             await conexion.doc().set(gasto.obtenerDatos);
             console.log("Se ha insertado el nuevo registro a la BD");
             bandera=1;
@@ -52,35 +53,16 @@ async function nuevoGasto(datos){
 async function buscarPorIDGasto (id){
     var gasto;
     try {
-        var bill=await conexion.doc(id).get();
-        billObject = new Registro(bill.id, bill.data());
-        if (billObject.bandera==0) {
-            gasto=billObject.obtenerDatos;
+        var docGasto=await conexion.doc(id).get();
+        gastoObjeto = new Gasto(docGasto.id, docGasto.data());
+        if (gastoObjeto.bandera==0) {
+            gasto=gastoObjeto.obtenerDatos;
         }
     } catch (error) {
-        console.log("Error al recuperar el registro  "+error);
+        console.log("Error al recuperar el gasto  "+error);
     }
     return gasto;
 }
-
-/*async function modificarGasto(datos){
-    var error=1;
-    var resBuscar = await buscarPorIDRegistro(datos.id);
-    if(resBuscar!=undefined){
-        var registro=new Registro(datos.id,datos);
-        if (registro.bandera==0) {
-            try {
-                await conexionMes(registro.mesCompra, registro.anioCompra);
-                await conexion.doc(registro.id).set(registro.obtenerDatos);
-                console.log("Registro modificado");
-                error=0;
-            } catch (err) {
-                console.log("Error en la modificar el registro "+err);
-            }
-        }
-    }
-    return error;
-}*/
 
 async function borrarGasto(id){
     var error=1;

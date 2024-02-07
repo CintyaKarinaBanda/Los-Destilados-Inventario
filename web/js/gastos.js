@@ -24,23 +24,22 @@ document.addEventListener("DOMContentLoaded", function () {
         selectAnio.appendChild(option);
     }
 
-    //var valueMes=document.getElementById("valueMes");
-    //var valueAnio=document.getElementById("valueAnio");
     selectAnio.value =  anioActual;
     selectMes.value = new Date().getMonth() + 1;
 
     // Configurar el WebSocket en el cliente
     const socket = io();
 
-    var valueMes=document.getElementById("valueMes");
-    var valueAnio=document.getElementById("valueAnio");
+    var mesGasto=document.getElementById("mesGasto");
+    var anioGasto=document.getElementById("anioGasto");
+    
 
     // Función para enviar valores al servidor
     function enviarValoresAlServidor() {
-        valueMes.value=selectMes.value;
-        valueAnio.value=selectAnio.value;
         var valorSelect1 = selectMes.value;
         var valorSelect2 = selectAnio.value;
+        mesGasto.value=selectMes.value;
+        anioGasto.value=selectAnio.value;
         fetch(`/gastos?parametro1=${encodeURIComponent(valorSelect1)}&parametro2=${encodeURIComponent(valorSelect2)}`)
             .then(response => {
                 if (!response.ok) {
@@ -53,13 +52,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Manejar actualizaciones del servidor
     socket.on('actualizarGastos', function (gastos){
-        console.log(gastos);
         actualizarTabla(gastos);
     });
 
     function actualizarTabla(gastos) {
-        //valueAnio.value = inventario.anioCompra;
-        //valueMes.value = inventario.mesCompra;
         var tbody = document.querySelector('tbody');
         tbody.innerHTML = '';
         gastos.forEach(function (gasto) {
@@ -67,8 +63,8 @@ document.addEventListener("DOMContentLoaded", function () {
             row.innerHTML = `
                 <td>${gasto.concepto || '' }</td>
                 <td>${gasto.cantidad || '' }</td>
-                <td><a href="/modificarRegistro/${gasto.id}">Editar</a>
-                    <a href="/borrarRegistro/${gasto.id}">Borrar</a>
+                <td><a href="/modificarGasto/${gasto.id}">Editar</a>
+                    <a href="/borrarGasto/${gasto.id}">Borrar</a>
                 </td>
               `;
 
