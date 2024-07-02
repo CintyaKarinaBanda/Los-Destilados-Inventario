@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", function () {
             <td>${ corte ? corte.sumaCosto : "" }</td>                    
             <td>${ corte ? corte.sumaGanancia : "" }</td>
             <td>${ corte ? corte.sumaSujetoA : "" }</td>
-            <td>${ corte ? corteMensual.sumaSujetoB : "" }</td>
+            <td>${ corte ? corte.sumaSujetoB : "" }</td>
             <td>${ corte ? corte.sumaSujetoC : "" }</td>
         `;
         tbody.appendChild(row);

@@ -127,6 +127,7 @@ rutas.get("/corte", verificarSesion, async (req, res) => {
     var parametro1 = req.query.parametro1 || (new Date().getMonth() + 1).toString();
     var parametro2 = req.query.parametro2 || (new Date().getFullYear()).toString();
     var corteMensual= await buscarMes(parametro1,parametro2);
+    console.log(corteMensual);
     const io = req.app.get('io');
     io.emit('actualizarCorte', corteMensual);
     res.render("corte/mostrarCorte", {corteMensual});
