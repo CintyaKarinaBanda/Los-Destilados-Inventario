@@ -1,10 +1,11 @@
 var rutas=require("express").Router();
 var {mostrarProducto, nuevoProducto, modificarProducto, borrarProducto, buscarPorIDProducto, buscarPorNombre} = require("../bd/productobd.js");
 var {nuevoRegistro, mostrarRegistro, borrarRegistro, buscarPorIDRegistro,conexionMesVenta} = require("../bd/ventas.js");
-var {buscarMes,sumaMensual,restaMensual}=require("../bd/meses.js");
+var {buscarMes,sumaMensual,restaMensual, mostrarMeses}=require("../bd/meses.js");
 var {nuevoGasto, conexionMesGasto, mostrarGastos, buscarPorIDGasto, borrarGasto}=require("../bd/gastos.js");
 var {mostrarProductosPoCaja, nuevoProductoPoCaja, modificarProductoPoCaja, borrarProductoPoCaja, buscarPorIDProductoPoCaja} = require("../bd/caja.js");
 var verificarSesion=require("../middlewares/session.js");
+const { logger } = require("firebase-functions");
 require('dotenv').config();
 
 
@@ -205,6 +206,35 @@ rutas.get("/borrarProductoPorCaja/:id", verificarSesion, verificarSesion, async(
     await borrarProductoPoCaja(req.params.id);
     res.redirect("/caja");
 });
+
+
+
+//---------------------------Ruta Estadisticas----------------------------------------
+rutas.get("/estadisticas", verificarSesion, async(req,res)=>{ 
+    var meses = await mostrarMeses();
+    var sumasAnuales = {}; 
+
+    meses.forEach(mes => {
+        var anio = mes.anio;
+        var sumaGanancia = parseFloat(mes.sumaGanancia); 
+        if (anio in sumasAnuales) sumasAnuales[anio] += sumaGanancia;
+        else sumasAnuales[anio] = sumaGanancia;
+    });
+
+    var anioFiltrado = req.query.anio || (new Date().getFullYear()).toString();
+    meses = meses.filter(mes => mes.anio == anioFiltrado);
+
+    const io = req.app.get('io');
+    io.on('connection', (socket) => {
+        socket.on('cambiarAnio', async(anio) => {
+            var meses = await mostrarMeses();
+            meses = meses.filter(mes => mes.anio == anio);
+            socket.emit('actualizarEstadistica', meses);
+        });
+    });
+    res.render("estadisticas/mostrar",{meses, sumasAnuales});
+});
+
 
 
 

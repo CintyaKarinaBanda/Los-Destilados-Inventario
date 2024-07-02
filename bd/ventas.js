@@ -63,25 +63,6 @@ async function buscarPorIDRegistro (id){
     return registro;
 }
 
-/*async function modificarRegistro(datos){
-    var error=1;
-    var resBuscar = await buscarPorIDRegistro(datos.id);
-    if(resBuscar!=undefined){
-        var registro=new Registro(datos.id,datos);
-        if (registro.bandera==0) {
-            try {
-                await conexionMes(registro.mesCompra, registro.anioCompra);
-                await conexion.doc(registro.id).set(registro.obtenerDatos);
-                console.log("Registro modificado");
-                error=0;
-            } catch (err) {
-                console.log("Error en la modificar el registro "+err);
-            }
-        }
-    }
-    return error;
-}
-*/
 async function borrarRegistro(id){
     var error=1;
     var registro = await buscarPorIDRegistro(id);
@@ -101,7 +82,6 @@ module.exports = {
     mostrarRegistro, 
     nuevoRegistro,
     buscarPorIDRegistro,
-    //modificarRegistro,
     borrarRegistro,
     conexionMesVenta
   };

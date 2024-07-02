@@ -1,6 +1,22 @@
 var conexion =require("./conexion").conecionMeses;
 var Mes =require("../modelo/Meses");
 
+async function mostrarMeses() {
+    var meses=[];
+    try {
+        var listado = await conexion.get();
+        listado.forEach((fila) => {
+            var mes = new Mes(fila.id, fila.data());
+            if (mes.bandera == 0) {
+                meses.push(mes.obtenerDatos);
+            }
+        });
+    }catch (error) {
+        console.log('Error al mostrar los meses: ', error);
+    }
+    return meses;
+} 
+
 async function verificarMes(mes, anio){
     var resultadoBusqueda={};
     try {
@@ -35,7 +51,6 @@ async function buscarMes(mes, anio){
             if (mesObjeto.bandera==0) {
                 resultado=mesObjeto.obtenerDatos;
             }
-            console.log("Registro mensual recuperado buscarMes()");
         }
     } catch (error) {
         console.log("Error al recuperar el registro mensual: buscarMes() ",error);
@@ -82,5 +97,6 @@ module.exports={
     verificarMes,
     restaMensual,
     sumaMensual,
-    buscarMes
+    buscarMes,
+    mostrarMeses
 }

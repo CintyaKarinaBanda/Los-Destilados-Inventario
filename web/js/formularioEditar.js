@@ -24,7 +24,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   var valueMes=document.getElementById("valueMes");
   var valueAnio=document.getElementById("valueAnio");
-  console.log(valueMes.value,valueAnio.value);
 
   selectAnio.value = valueAnio.value || anioActual;
   selectMes.value = valueMes.value || new Date().getMonth() + 1;

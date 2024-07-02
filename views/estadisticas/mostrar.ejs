@@ -1,0 +1,187 @@
+<%- include("../templates/encabezado") %>
+<%- include("../templates/menu") %>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="/socket.io/socket.io.js"></script> 
+
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h1 class="fw-bold">Ingresos Mensuales</h1>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="table-responsive col-md-3">
+                    <select class="form-control mb-3" name="anio" id="anio"></select>
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Mes</th>
+                                <th>Ingresos</th>
+                            </tr>
+                        </thead>
+                        <% 
+                        const monthNames = [
+                            'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 
+                            'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+                        ];
+                        meses.sort((a, b) => a.mes - b.mes);
+                        %>
+                        <tbody id="tBodyMeses">
+                            <% meses.forEach((mes) => { %>
+                                <tr>
+                                    <td><%= monthNames[mes.mes - 1] %></td>
+                                    <td><%= mes.sumaGanancia %></td>
+                                </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-9">
+                    <canvas id="mesesChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h1 class="fw-bold">Ingresos por Año</h1>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="table-responsive col-md-3">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Año</th>
+                                <th>Suma Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% Object.keys(sumasAnuales).forEach(anio => { %>
+                                <tr>
+                                    <td><%= anio %></td>
+                                    <td><%= sumasAnuales[anio].toFixed(2) %></td>
+                                </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-9">
+                    <canvas id="anioChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include("../templates/pie") %>
+
+<script>
+    let chartMeses;
+    const monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const selectAnio = document.getElementById("anio");
+        const anioActual = new Date().getFullYear();
+        
+        for (let i = anioActual - 1; i <= anioActual + 1; i++) {
+            const option = document.createElement("option");
+            option.value = i;
+            option.text = i;
+            selectAnio.appendChild(option);
+        }
+
+        selectAnio.value = anioActual;
+
+        const meses = <%- JSON.stringify(meses) %>;
+        generarGraficasMensuales(meses, monthNames);
+        generarGraficasAnuales();
+
+        const socket = io();
+        socket.on('actualizarEstadistica', function (data) {
+            actualizarTabla(data);
+            generarGraficasMensuales(data, monthNames);
+        });
+
+        selectAnio.addEventListener('change', function() {
+            const anioSeleccionado = selectAnio.value;
+            socket.emit('cambiarAnio', anioSeleccionado);
+        });
+    });
+
+    function actualizarTabla(data) {
+        data.sort((a, b) => a.mes - b.mes);
+        var tbody = document.getElementById('tBodyMeses');
+        tbody.innerHTML = '';
+        data.forEach(mes => {
+            var row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${mes && mes.mes ? monthNames[mes.mes - 1] : ""}</td>                    
+                <td>${mes && mes.sumaGanancia ? mes.sumaGanancia.toFixed(2) : ""}</td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
+
+    function generarGraficasMensuales(data, monthNames) {
+        if (chartMeses) {
+            chartMeses.destroy();
+        }
+        const labels = data.map(mes => monthNames[mes.mes - 1]);
+        const datos = data.map(mes => mes.sumaGanancia);
+        const ctx = document.getElementById('mesesChart').getContext('2d');
+        
+        chartMeses = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Ingresos',
+                    data: datos,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+
+    function generarGraficasAnuales() {
+        const sumasAnuales = <%- JSON.stringify(sumasAnuales) %>;
+        const labels = Object.keys(sumasAnuales);
+        const data = Object.values(sumasAnuales);
+        const ctx = document.getElementById('anioChart').getContext('2d');
+        
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Suma Total de Ganancias por Año',
+                    data: data,
+                    backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                    borderColor: 'rgba(153, 102, 255, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+</script>

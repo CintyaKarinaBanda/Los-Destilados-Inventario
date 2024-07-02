@@ -38,7 +38,6 @@ async function nuevoGasto(datos){
     var error=1;
     if (gasto.bandera==0) {
         try {
-            console.log(conexion);
             await conexion.doc().set(gasto.obtenerDatos);
             console.log("Se ha insertado el nuevo registro a la BD");
             bandera=1;

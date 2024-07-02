@@ -50,22 +50,19 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     function actualizarTabla(corte) {
-        if (corte && typeof corte === 'object') {
-            var tbody = document.querySelector('tbody');
-            tbody.innerHTML = '';
-            var row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${corte.sumaPrecio || ''}</td>
-                <td>${corte.sumaCosto || ''}</td>
-                <td>${corte.sumaGanancia || ''}</td>
-                <td>${corte.sumaSujetoA || ''}</td>
-                <td>${corte.sumaSujetoB || ''}</td>
-                <td>${corte.sumaSujetoC || ''}</td>
-            `;
-            tbody.appendChild(row);
-        }
+        var tbody = document.querySelector('tbody');
+        tbody.innerHTML = '';
+        var row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${ corte ? corte.sumaPrecio : "" }</td>
+            <td>${ corte ? corte.sumaCosto : "" }</td>                    
+            <td>${ corte ? corte.sumaGanancia : "" }</td>
+            <td>${ corte ? corte.sumaSujetoA : "" }</td>
+            <td>${ corte ? corteMensual.sumaSujetoB : "" }</td>
+            <td>${ corte ? corte.sumaSujetoC : "" }</td>
+        `;
+        tbody.appendChild(row);
     }
-
 
     var inputs = document.querySelectorAll("input");
     inputs.forEach(function (input) {
