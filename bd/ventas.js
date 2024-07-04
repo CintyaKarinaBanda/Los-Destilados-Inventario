@@ -11,6 +11,7 @@ async function conexionMesVenta(mes, anio){
         } else{
             conexion = undefined;
         }
+        return conexion;
     } catch (error) {
         console.log("Error en la funión conexión mes: ", error);
     }

@@ -1,9 +1,10 @@
 var rutas=require("express").Router();
 var {mostrarProducto, nuevoProducto, modificarProducto, borrarProducto, buscarPorIDProducto, buscarPorNombre} = require("../bd/productobd.js");
-var {nuevoRegistro, mostrarRegistro, borrarRegistro, buscarPorIDRegistro,conexionMesVenta} = require("../bd/ventas.js");
+var {nuevoRegistro, mostrarRegistro, borrarRegistro, buscarPorIDRegistro, conexionMesVenta} = require("../bd/ventas.js");
 var {buscarMes,sumaMensual,restaMensual, mostrarMeses}=require("../bd/meses.js");
 var {nuevoGasto, conexionMesGasto, mostrarGastos, buscarPorIDGasto, borrarGasto}=require("../bd/gastos.js");
 var {mostrarProductosPoCaja, nuevoProductoPoCaja, modificarProductoPoCaja, borrarProductoPoCaja, buscarPorIDProductoPoCaja} = require("../bd/caja.js");
+var {calcularSumasAnuales, obtenerEstadisticasAnuales, configurarSockets, procesarVentas}=require("../bd/funcionesEstadisticas.js");
 var verificarSesion=require("../middlewares/session.js");
 const { logger } = require("firebase-functions");
 require('dotenv').config();
@@ -211,31 +212,20 @@ rutas.get("/borrarProductoPorCaja/:id", verificarSesion, verificarSesion, async(
 
 
 //---------------------------Ruta Estadisticas----------------------------------------
-rutas.get("/estadisticas", verificarSesion, async(req,res)=>{ 
-    var meses = await mostrarMeses();
-    var sumasAnuales = {}; 
+rutas.get("/estadisticas", verificarSesion, async (req, res) => {
+    const meses = await mostrarMeses();
+    const sumasAnuales = calcularSumasAnuales(meses);
 
-    meses.forEach(mes => {
-        var anio = mes.anio;
-        var sumaGanancia = parseFloat(mes.sumaGanancia); 
-        if (anio in sumasAnuales) sumasAnuales[anio] += sumaGanancia;
-        else sumasAnuales[anio] = sumaGanancia;
-    });
+    const anioActual = new Date().getFullYear().toString();
+    const mesesActuales = meses.filter(mes => mes.anio === anioActual);
 
-    var anioFiltrado = req.query.anio || (new Date().getFullYear()).toString();
-    meses = meses.filter(mes => mes.anio == anioFiltrado);
+    const [clientesOrdenados, productosOrdenados] = await obtenerEstadisticasAnuales(anioActual);
 
     const io = req.app.get('io');
-    io.on('connection', (socket) => {
-        socket.on('cambiarAnio', async(anio) => {
-            var meses = await mostrarMeses();
-            meses = meses.filter(mes => mes.anio == anio);
-            socket.emit('actualizarEstadistica', meses);
-        });
-    });
-    res.render("estadisticas/mostrar",{meses, sumasAnuales});
+    configurarSockets(io);
+    console.log(clientesOrdenados, productosOrdenados);
+    res.render("estadisticas/mostrar", { meses: mesesActuales, sumasAnuales, clientesOrdenados, productosOrdenados });
 });
-
 
 
 

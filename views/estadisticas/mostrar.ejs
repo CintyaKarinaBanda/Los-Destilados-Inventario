@@ -8,11 +8,11 @@
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
             <h1 class="fw-bold">Ingresos Mensuales</h1>
+            <select class="form-control mb-3" name="anioGrafica" id="anioGrafica" style="width: 200px !important;"></select>
         </div>
         <div class="card-body">
             <div class="row">
                 <div class="table-responsive col-md-3">
-                    <select class="form-control mb-3" name="anio" id="anio"></select>
                     <table class="table table-hover">
                         <thead>
                             <tr>
@@ -78,6 +78,55 @@
     </div>
 </div>
 
+<div class="container mt-5 mb-5">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h1 class="fw-bold">Conteo Anual</h1>
+            <select class="form-control mb-3" id="anioTablas" style="width: 200px !important;"></select>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="table-responsive col-md-6">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Cliente</th>
+                                <th>Compras Totales</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tBodyClientes">
+                            <% clientesOrdenados.forEach(cliente => { %>
+                                <tr>
+                                    <td><%= cliente[0] %></td>
+                                    <td><%= cliente[1].contador %></td>
+                                </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="table-responsive col-md-6">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Botellas</th>
+                                <th>No. Vendidas</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tBodyProductos">
+                            <% productosOrdenados.forEach(producto => { %>
+                                <tr>
+                                    <td><%= producto[0] %></td>
+                                    <td><%= producto[1] %></td>
+                                </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <%- include("../templates/pie") %>
 
 <script>
@@ -85,17 +134,24 @@
     const monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
     document.addEventListener('DOMContentLoaded', function () {
-        const selectAnio = document.getElementById("anio");
+        const selectAnioGrafica = document.getElementById("anioGrafica");
+        const selectAnioTablas = document.getElementById("anioTablas");
         const anioActual = new Date().getFullYear();
-        
-        for (let i = anioActual - 1; i <= anioActual + 1; i++) {
+
+        function agregarOpcion(select, valor, texto) {
             const option = document.createElement("option");
-            option.value = i;
-            option.text = i;
-            selectAnio.appendChild(option);
+            option.value = valor;
+            option.textContent = texto;
+            select.appendChild(option);
         }
 
-        selectAnio.value = anioActual;
+        for (let i = 2023; i <= anioActual + 1; i++) {
+            agregarOpcion(selectAnioGrafica, i, i);
+            agregarOpcion(selectAnioTablas, i, i);
+        }
+
+        selectAnioGrafica.value = anioActual;
+        selectAnioTablas.value = anioActual;
 
         const meses = <%- JSON.stringify(meses) %>;
         generarGraficasMensuales(meses, monthNames);
@@ -107,11 +163,41 @@
             generarGraficasMensuales(data, monthNames);
         });
 
-        selectAnio.addEventListener('change', function() {
-            const anioSeleccionado = selectAnio.value;
+        socket.on('actualizarTablas', function (data) {
+            var tBodyClientes = document.getElementById('tBodyClientes');
+            tBodyClientes.innerHTML = '';
+            data.listaClientes.forEach(cliente => {
+                var row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${cliente ? cliente[0] : ""}</td>                    
+                    <td>${cliente ? cliente[1].contador : ""}</td>
+                `;
+                tBodyClientes.appendChild(row);
+            });
+            var tBodyProductos = document.getElementById('tBodyProductos');
+            tBodyProductos.innerHTML = '';
+            data.listaProductos.forEach(producto => {
+                var row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${producto ? producto[0] : ""}</td>                    
+                    <td>${producto ? producto[1] : ""}</td>
+                `;
+                tBodyProductos.appendChild(row);
+            });
+        });
+
+
+        selectAnioGrafica.addEventListener('change', function() {
+            const anioSeleccionado = selectAnioGrafica.value;
             socket.emit('cambiarAnio', anioSeleccionado);
         });
-    });
+
+        selectAnioTablas.addEventListener('change', function() {
+            const anioSeleccionado = selectAnioTablas.value;
+            socket.emit('cambiarAnioTabla', anioSeleccionado);
+        });
+
+    }, { once: true });
 
     function actualizarTabla(data) {
         data.sort((a, b) => a.mes - b.mes);
