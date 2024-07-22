@@ -23,9 +23,9 @@
                         <% productos.forEach((producto) => { %>
                         <tr>
                             <td><%= producto.nombre %></td>
-                            <td><%= producto.precio %></td>
-                            <td><%= producto.costo %></td>
-                            <td><%= producto.ganancia %></td>
+                            <td>$ <%= producto.precio %></td>
+                            <td>$ <%= producto.costo %></td>
+                            <td>$ <%= producto.ganancia %></td>
                             <td>
                                 <a href="/modificarProducto/<%= producto.id %>">Editar</a>
                                 <a href="/borrarProducto/<%= producto.id %>">Borrar</a>

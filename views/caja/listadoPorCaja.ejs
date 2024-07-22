@@ -1,44 +1,54 @@
-<%- include("../templates/encabezado") %>
-<%- include("../templates/menu") %>
+<%- include("../templates/encabezado") %> <%- include("../templates/menu") %>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
 
 <div class="container mt-5 mb-5">
-    <div class="card">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <h1 class="fw-bold">Caja</h1>
-            <a href="/insertarCaja" class="btn btn-primary text-center">Añadir</a>
-        </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>Destilado</th>
-                            <th>Piezas</th>
-                            <th>Militros</th>
-                            <th>Precio</th>
-                            <th>Editar/Borrar</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% caja.forEach((producto) => { %>
-                        <tr>
-                            <td><%= producto.destilado %></td>
-                            <td><%= producto.piezas %></td>
-                            <td><%= producto.militros %></td>
-                            <td><%= producto.precio %></td>
-                            <td>
-                                <a href="/editarCaja/<%= producto.id %>">Editar</a>
-                                <a href="/borrarProductoPorCaja/<%= producto.id %>">Borrar</a>
-                            </td>
-                        </tr>
-                        <% }); %>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="card-footer">
-        </div>
+  <div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h1 class="fw-bold">Caja</h1>
+      <div class="col-3 text-center">
+        <a href="/insertarCaja" class="btn btn-primary">Añadir</a>
+        <button type="button" class="btn btn-primary" id="downloadPDF">
+          Descargar
+        </button>
+      </div>
     </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-hover" id="tableCaja">
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th>Piezas</th>
+              <th>Militros</th>
+              <th>Precio</th>
+              <th>Editar/Borrar</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% caja.forEach((producto)=> { %>
+            <tr>
+              <td><%= producto.destilado %></td>
+              <td><%= producto.piezas %></td>
+              <td><%= producto.militros %></td>
+              <td>$ <%= producto.precio %></td>
+              <td>
+                <a href="/editarCaja/<%= producto.id %>">Editar</a>
+                <a href="/borrarProductoPorCaja/<%= producto.id %>">Borrar</a>
+              </td>
+            </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card-footer"></div>
+  </div>
 </div>
 
+<script type="module" src="/web/js/descargarPDF.js"></script>
 <%- include("../templates/pie") %>
+<script id="datosScript" type="application/json">
+    <%- JSON.stringify(caja) %>
+</script>

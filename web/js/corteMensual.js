@@ -54,12 +54,12 @@ document.addEventListener("DOMContentLoaded", function () {
         tbody.innerHTML = '';
         var row = document.createElement('tr');
         row.innerHTML = `
-            <td>${ corte ? corte.sumaPrecio : "" }</td>
-            <td>${ corte ? corte.sumaCosto : "" }</td>                    
-            <td>${ corte ? corte.sumaGanancia : "" }</td>
-            <td>${ corte ? corte.sumaSujetoA : "" }</td>
-            <td>${ corte ? corte.sumaSujetoB : "" }</td>
-            <td>${ corte ? corte.sumaSujetoC : "" }</td>
+            <td>$ ${ corte ? corte.sumaPrecio : "" }</td>
+            <td>$ ${ corte ? corte.sumaCosto : "" }</td>                    
+            <td>$ ${ corte ? corte.sumaGanancia : "" }</td>
+            <td>$ ${ corte ? corte.sumaSujetoA : "" }</td>
+            <td>$ ${ corte ? corte.sumaSujetoB : "" }</td>
+            <td>$ ${ corte ? corte.sumaSujetoC : "" }</td>
         `;
         tbody.appendChild(row);
     }

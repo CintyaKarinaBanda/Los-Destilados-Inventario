@@ -44,7 +44,7 @@
                                 <% gastos.forEach((gasto)=> {%>
                                 <tr>
                                     <td><%= gasto.concepto || '' %></td>
-                                    <td><%= gasto.cantidad || '' %></td>
+                                    <td>$ <%= gasto.cantidad || '' %></td>
                                     <td><a href="/modificarGasto/<%= gasto.id %>">Editar</a>
                                         <a href="/borrarGasto/<%= gasto.id %>">Borrar</a>
                                     </td>

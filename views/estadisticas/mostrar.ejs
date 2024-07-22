@@ -31,7 +31,7 @@
                             <% meses.forEach((mes) => { %>
                                 <tr>
                                     <td><%= monthNames[mes.mes - 1] %></td>
-                                    <td><%= mes.sumaGanancia %></td>
+                                    <td>$ <%= mes.sumaGanancia %></td>
                                 </tr>
                             <% }); %>
                         </tbody>
@@ -64,7 +64,7 @@
                             <% Object.keys(sumasAnuales).forEach(anio => { %>
                                 <tr>
                                     <td><%= anio %></td>
-                                    <td><%= sumasAnuales[anio].toFixed(2) %></td>
+                                    <td>$ <%= sumasAnuales[anio].toFixed(2) %></td>
                                 </tr>
                             <% }); %>
                         </tbody>

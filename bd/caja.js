@@ -11,6 +11,13 @@ async function mostrarProductosPoCaja() {
                 products.push(product.obtenerDatos);
             }
         });
+
+        products.sort((a, b) => {
+            if (a.destilado < b.destilado) return -1;
+            if (a.destilado > b.destilado) return 1;
+            return 0;
+        });
+
     } catch (error) {
         console.log("Error al recuperar productos en la BD "+error);
     }
