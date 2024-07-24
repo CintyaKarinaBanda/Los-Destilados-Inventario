@@ -229,6 +229,14 @@ rutas.get("/estadisticas", verificarSesion, async (req, res) => {
 
 
 
+//---------------------------Ruta Punto de Venta------------------------------
+rutas.get("/puntoDeVenta",(req,res)=>{
+    const productos = mostrarProducto();
+    res.render("puntoDeVenta/formulario", { productos });
+});
+
+
+
 //---------------------------Ruta Salir---------------------------------------
 rutas.get("/logOut",(req,res)=>{
     req.session = null;

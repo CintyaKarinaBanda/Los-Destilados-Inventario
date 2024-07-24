@@ -49,7 +49,7 @@ async function buscarPorIDProductoPoCaja (id){
             product=productoObjeto.obtenerDatos;
         }
     } catch (error) {
-        console.log("Error al recuperar el producto  "+error);
+        console.log("Error al recuperar el producto: "+error);
     }
     return product;
 }
@@ -58,7 +58,7 @@ async function modificarProductoPoCaja(datos){
     var error=1;
     var resBuscar = await buscarPorIDProductoPoCaja(datos.id);
     if(resBuscar!=undefined){
-        var product=new Producto(datos.id,datos);
+        var product=new Caja(datos.id,datos);
         if (product.bandera==0) {
             try {
                 await conexion.doc(product.id).set(product.obtenerDatos);

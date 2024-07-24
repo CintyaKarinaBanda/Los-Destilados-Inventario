@@ -1,0 +1,22 @@
+<%- include("../templates/encabezado") %>
+<%- include("../templates/menu") %>
+
+<div class="container mt-5">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h1 class="fw-bold">Generar Venta</h1>
+            </div>
+            <div class="card-body">
+                <button type="button" class="form-control btn btn-primary mb-3" id="anadirProducto"> Añadir Producto</button>
+                <div id="productos"></div>
+            </div>
+        </div>
+</div>
+
+<script src="/web/js/puntoDeVenta/anadirProducto.js"></script>
+
+<%- include("../templates/pie") %>
+
+<script id="datosScript" type="application/json">
+    <%- JSON.stringify(productos) %>
+</script>

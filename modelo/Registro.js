@@ -48,10 +48,10 @@ class Registro{
         producto.length>0?this._producto=producto: this.bandera=1;
     }
     set anioQR(anioQR){
-        anioQR.length>0?this._anioQR=anioQR: this.bandera=1;
+        this._anioQR=anioQR || '';
     }
     set codigoQR(codigoQR){
-        codigoQR.length>0?this._codigoQR=codigoQR: this.bandera=1;
+        this._codigoQR=codigoQR || '';
     }
 
     set precio(precio){
