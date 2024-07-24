@@ -17,7 +17,7 @@ document.getElementById("downloadPDF").addEventListener("click", async () => {
     const logo = new Image();
 
     img.src = '/web/imagenes/fondo.png';
-    logo.src = '/web/imagenes/logo_mejor_calidad.png';
+    logo.src = '/web/imagenes/logoX2.png';
 
     // Esperar a que ambas imágenes se carguen
     const loadImages = () => {
